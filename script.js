@@ -11,10 +11,10 @@ function obtenerValorPip(par) {
       return 10;
 
     case "USDCAD":
-      return 7.2;
+      return 7.19;
 
     case "USDCHF":
-      return 12.5;
+      return 12.35;
 
     case "XAUUSD":
       return 1;
@@ -261,7 +261,6 @@ function mostrarResultados(resultado) {
   if (!resultado || !resultado.ok) {
     els.lotResult.textContent = "0.00";
     els.lossResult.textContent = "$0.00";
-    els.valuePerPointResult.textContent = "—";
     dibujarGauge(0);
     return;
   }
@@ -374,7 +373,10 @@ function calcularYMostrar() {
 function inicializarEventos() {
   els.pairSelect.addEventListener(
     "change",
-    calcularYMostrar
+    function () {
+      mostrarValorPipDelPar(this.value);
+      calcularYMostrar();
+    }
   );
 
   els.capitalInput.addEventListener(
@@ -437,10 +439,22 @@ function inicializarEventos() {
   }
 }
 
+function mostrarValorPipDelPar(par) {
+  const valorPip = obtenerValorPip(par);
+
+  if (valorPip === null) {
+    els.valuePerPointResult.textContent = "—";
+    return;
+  }
+
+  els.valuePerPointResult.textContent = formatearUSD(valorPip);
+}
+
 function iniciar() {
   llenarSelectPares();
   inicializarEventos();
   setRiskMode(RISK_SIMPLE);
+  mostrarValorPipDelPar(els.pairSelect.value);
   calcularYMostrar();
 }
 
