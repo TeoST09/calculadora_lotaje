@@ -36,7 +36,7 @@ function calcularLotaje(par, riesgoUSD, slPips, capital) {
   }
 
   if (!riesgoUSD || riesgoUSD <= 0) {
-    return { ok: false, mensaje: "Ingresa el riesgo en USD." };
+    return { ok: false, mensaje: "Ingresa el riesgo en USD y con ( . ) paara los decimales." };
   }
 
   if (!slPips || slPips <= 0) {
@@ -116,6 +116,12 @@ function textoACapital(texto) {
       .replace(",", ".");
   } else if (valor.includes(",")) {
     valor = valor.replace(/,/g, "");
+  } else if (valor.includes(".")) {
+    const partes = valor.split(".");
+
+    if (partes[1] && partes[1].length === 3) {
+      valor = valor.replace(".", "");
+    }
   }
 
   return Number(valor);
