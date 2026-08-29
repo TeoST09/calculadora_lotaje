@@ -8,9 +8,13 @@ function obtenerValorPip(par) {
     case "EURUSD":
     case "GBPUSD":
     case "AUDUSD":
-    case "USDCHF":
-    case "USDCAD":
       return 10;
+
+    case "USDCAD":
+      return 7.2;
+
+    case "USDCHF":
+      return 12.5;
 
     case "XAUUSD":
       return 1;
