@@ -32,38 +32,67 @@ function obtenerValorPip(par) {
 
 function calcularLotaje(par, riesgoUSD, slPips, capital) {
   if (!par) {
-    return { ok: false, mensaje: "Selecciona un par válido." };
+    return {
+      ok: false,
+      mensaje: "Selecciona un par válido."
+    };
   }
 
   if (!riesgoUSD || riesgoUSD <= 0) {
-    return { ok: false, mensaje: "Ingresa el riesgo en USD y con ( . ) paara los decimales." };
+    return {
+      ok: false,
+      mensaje: "Ingresa el riesgo en USD y con (.) para los decimales."
+    };
   }
 
   if (!slPips || slPips <= 0) {
-    return { ok: false, mensaje: "Ingresa el SL en pips/puntos." };
+    return {
+      ok: false,
+      mensaje: "Ingresa el SL en pips/puntos."
+    };
   }
 
   const valorPip = obtenerValorPip(par);
 
   if (valorPip === null) {
-    return { ok: false, mensaje: "Par no soportado." };
+    return {
+      ok: false,
+      mensaje: "Par no soportado."
+    };
   }
+  
+  const loteCrudo =
+    riesgoUSD / (slPips * valorPip);
 
-  const loteCrudo = riesgoUSD / (slPips * valorPip);
-  const lote = Math.max(0, Math.floor(loteCrudo * 100) / 100);
-  const perdidaReal = lote * slPips * valorPip;
+  const lote =
+    Math.max(
+      0,
+      Math.round((loteCrudo + Number.EPSILON) * 100) / 100
+    );
+
+
+  const perdidaReal =
+    lote * slPips * valorPip;
+
+
+  const diferenciaRiesgo =
+    riesgoUSD - perdidaReal;
+
 
   let riesgoPctCapital = null;
 
   if (capital && capital > 0) {
-    riesgoPctCapital = (perdidaReal / capital) * 100;
+    riesgoPctCapital =
+      (perdidaReal / capital) * 100;
   }
 
   return {
     ok: true,
     lote,
+    loteCrudo,
     valorPip,
     perdidaReal,
+    diferenciaRiesgo,
     riesgoPctCapital
   };
 }
@@ -85,30 +114,38 @@ const els = {
   gaugeValue: document.getElementById("gaugeValue"),
   lotResult: document.getElementById("lotResult"),
   lossResult: document.getElementById("lossResult"),
-  valuePerPointResult: document.getElementById("valuePerPointResult"),
+  valuePerPointResult: document.getElementById("valuePerPointResult")
 };
 
 function textoANumero(texto) {
-  if (typeof texto !== "string") return NaN;
+  if (typeof texto !== "string") {
+    return NaN;
+  }
 
   const limpio = texto
     .replace(/[^0-9.,-]/g, "")
     .replace(/,/g, "")
     .trim();
 
-  if (limpio === "") return NaN;
+  if (limpio === "") {
+    return NaN;
+  }
 
   return Number(limpio);
 }
 
 function textoACapital(texto) {
-  if (typeof texto !== "string") return NaN;
+  if (typeof texto !== "string") {
+    return NaN;
+  }
 
   let valor = texto
     .replace(/[^0-9.,-]/g, "")
     .trim();
 
-  if (valor === "") return NaN;
+  if (valor === "") {
+    return NaN;
+  }
 
   if (valor.includes(".") && valor.includes(",")) {
     valor = valor
@@ -119,7 +156,10 @@ function textoACapital(texto) {
   } else if (valor.includes(".")) {
     const partes = valor.split(".");
 
-    if (partes[1] && partes[1].length === 3) {
+    if (
+      partes[1] &&
+      partes[1].length === 3
+    ) {
       valor = valor.replace(".", "");
     }
   }
@@ -150,9 +190,15 @@ const LISTA_PARES = [
 function llenarSelectPares() {
   els.pairSelect.innerHTML = "";
 
-  for (let i = 0; i < LISTA_PARES.length; i++) {
+  for (
+    let i = 0;
+    i < LISTA_PARES.length;
+    i++
+  ) {
     const par = LISTA_PARES[i];
-    const opcion = document.createElement("option");
+
+    const opcion =
+      document.createElement("option");
 
     opcion.value = par;
     opcion.textContent = par;
@@ -165,26 +211,50 @@ function setRiskMode(modo) {
   riskMode = modo;
 
   const botones =
-    els.riskModeToggle.querySelectorAll(".segmented-btn");
+    els.riskModeToggle.querySelectorAll(
+      ".segmented-btn"
+    );
 
-  for (let i = 0; i < botones.length; i++) {
+  for (
+    let i = 0;
+    i < botones.length;
+    i++
+  ) {
     const btn = botones[i];
 
     if (btn.dataset.mode === modo) {
       btn.classList.add("is-active");
-      btn.setAttribute("aria-selected", "true");
+
+      btn.setAttribute(
+        "aria-selected",
+        "true"
+      );
     } else {
       btn.classList.remove("is-active");
-      btn.setAttribute("aria-selected", "false");
+
+      btn.setAttribute(
+        "aria-selected",
+        "false"
+      );
     }
   }
 
   if (modo === RISK_SIMPLE) {
-    els.simpleRiskBlock.classList.remove("is-hidden");
-    els.fullRiskBlock.classList.add("is-hidden");
+    els.simpleRiskBlock.classList.remove(
+      "is-hidden"
+    );
+
+    els.fullRiskBlock.classList.add(
+      "is-hidden"
+    );
   } else {
-    els.simpleRiskBlock.classList.add("is-hidden");
-    els.fullRiskBlock.classList.remove("is-hidden");
+    els.simpleRiskBlock.classList.add(
+      "is-hidden"
+    );
+
+    els.fullRiskBlock.classList.remove(
+      "is-hidden"
+    );
   }
 
   calcularYMostrar();
@@ -196,11 +266,15 @@ const GAUGE_REFERENCIA_PCT = 2;
 function dibujarGauge(pctCapital) {
   let pct = pctCapital;
 
-  if (pct === null || isNaN(pct)) {
+  if (
+    pct === null ||
+    isNaN(pct)
+  ) {
     pct = 0;
   }
 
-  let ratio = pct / GAUGE_REFERENCIA_PCT;
+  let ratio =
+    pct / GAUGE_REFERENCIA_PCT;
 
   if (ratio > 1.15) {
     ratio = 1.15;
@@ -208,9 +282,11 @@ function dibujarGauge(pctCapital) {
 
   const offset =
     GAUGE_LARGO -
-    Math.min(ratio, 1) * GAUGE_LARGO;
+    Math.min(ratio, 1) *
+      GAUGE_LARGO;
 
-  els.gaugeFill.style.strokeDashoffset = offset;
+  els.gaugeFill.style.strokeDashoffset =
+    offset;
 
   let color = "var(--green)";
 
@@ -223,7 +299,10 @@ function dibujarGauge(pctCapital) {
   }
 
   els.gaugeFill.style.stroke = color;
-  els.gaugeValue.textContent = pct.toFixed(2) + "%";
+
+  els.gaugeValue.textContent =
+    pct.toFixed(2) + "%";
+
   els.gaugeValue.style.color =
     ratio >= 1
       ? "var(--red)"
@@ -232,15 +311,23 @@ function dibujarGauge(pctCapital) {
 
 function mostrarValidacion(mensaje) {
   if (!mensaje) {
-    els.validationBox.classList.add("is-hidden");
+    els.validationBox.classList.add(
+      "is-hidden"
+    );
+
     els.validationBox.innerHTML = "";
+
     return;
   }
 
-  els.validationBox.classList.remove("is-hidden");
+  els.validationBox.classList.remove(
+    "is-hidden"
+  );
 
   els.validationBox.innerHTML =
-    "<ul><li>" + mensaje + "</li></ul>";
+    "<ul><li>" +
+    mensaje +
+    "</li></ul>";
 }
 
 function setEstadoPill(estado) {
@@ -250,11 +337,17 @@ function setEstadoPill(estado) {
   );
 
   if (estado === "valid") {
-    els.statusPill.classList.add("is-valid");
+    els.statusPill.classList.add(
+      "is-valid"
+    );
+
     els.statusPillText.textContent =
       "Cálculo válido";
   } else if (estado === "invalid") {
-    els.statusPill.classList.add("is-invalid");
+    els.statusPill.classList.add(
+      "is-invalid"
+    );
+
     els.statusPillText.textContent =
       "Revisa los datos";
   } else {
@@ -264,21 +357,38 @@ function setEstadoPill(estado) {
 }
 
 function mostrarResultados(resultado) {
-  if (!resultado || !resultado.ok) {
-    els.lotResult.textContent = "0.00";
-    els.lossResult.textContent = "$0.00";
+  if (
+    !resultado ||
+    !resultado.ok
+  ) {
+    els.lotResult.textContent =
+      "0.00";
+
+    els.lossResult.textContent =
+      "$0.00";
+
+    els.valuePerPointResult.textContent =
+      "$0.00";
+
     dibujarGauge(0);
+
     return;
   }
+
 
   els.lotResult.textContent =
     resultado.lote.toFixed(2);
 
   els.lossResult.textContent =
-    formatearUSD(resultado.perdidaReal);
+    formatearUSD(
+      resultado.perdidaReal
+    );
+
 
   els.valuePerPointResult.textContent =
-    formatearUSD(resultado.valorPip);
+    formatearUSD(
+      resultado.valorPip
+    );
 
   dibujarGauge(
     resultado.riesgoPctCapital
@@ -287,13 +397,19 @@ function mostrarResultados(resultado) {
 
 function hayAlgunDatoIngresado() {
   const slPips =
-    textoANumero(els.slPipsInput.value);
+    textoANumero(
+      els.slPipsInput.value
+    );
 
   const capital =
-    textoACapital(els.capitalInput.value);
+    textoACapital(
+      els.capitalInput.value
+    );
 
   const riesgo =
-    textoANumero(els.riskAmountInput.value);
+    textoANumero(
+      els.riskAmountInput.value
+    );
 
   return Boolean(
     slPips ||
@@ -303,7 +419,8 @@ function hayAlgunDatoIngresado() {
 }
 
 function calcularYMostrar() {
-  const par = els.pairSelect.value;
+  const par =
+    els.pairSelect.value;
 
   const capital =
     textoACapital(
@@ -352,7 +469,9 @@ function calcularYMostrar() {
 
   if (resultado.ok) {
     setEstadoPill("valid");
-  } else if (hayAlgunDatoIngresado()) {
+  } else if (
+    hayAlgunDatoIngresado()
+  ) {
     setEstadoPill("invalid");
   } else {
     setEstadoPill("idle");
@@ -364,7 +483,10 @@ function calcularYMostrar() {
         els.riskPercentSelect.value
       ) || 0;
 
-    if (capital && capital > 0) {
+    if (
+      capital &&
+      capital > 0
+    ) {
       els.fullRiskComputed.textContent =
         formatearUSD(
           capital * (pct / 100)
@@ -380,7 +502,10 @@ function inicializarEventos() {
   els.pairSelect.addEventListener(
     "change",
     function () {
-      mostrarValorPipDelPar(this.value);
+      mostrarValorPipDelPar(
+        this.value
+      );
+
       calcularYMostrar();
     }
   );
@@ -410,11 +535,17 @@ function inicializarEventos() {
       ".segmented-btn"
     );
 
-  for (let i = 0; i < botonesRiesgo.length; i++) {
+  for (
+    let i = 0;
+    i < botonesRiesgo.length;
+    i++
+  ) {
     botonesRiesgo[i].addEventListener(
       "click",
       function () {
-        setRiskMode(this.dataset.mode);
+        setRiskMode(
+          this.dataset.mode
+        );
       }
     );
   }
@@ -424,20 +555,30 @@ function inicializarEventos() {
       ".chip[data-risk-amount]"
     );
 
-  for (let i = 0; i < chips.length; i++) {
+  for (
+    let i = 0;
+    i < chips.length;
+    i++
+  ) {
     chips[i].addEventListener(
       "click",
       function () {
         els.riskAmountInput.value =
           this.dataset.riskAmount;
 
-        for (let j = 0; j < chips.length; j++) {
+        for (
+          let j = 0;
+          j < chips.length;
+          j++
+        ) {
           chips[j].classList.remove(
             "is-active"
           );
         }
 
-        this.classList.add("is-active");
+        this.classList.add(
+          "is-active"
+        );
 
         calcularYMostrar();
       }
@@ -446,21 +587,33 @@ function inicializarEventos() {
 }
 
 function mostrarValorPipDelPar(par) {
-  const valorPip = obtenerValorPip(par);
+  const valorPip =
+    obtenerValorPip(par);
 
   if (valorPip === null) {
-    els.valuePerPointResult.textContent = "—";
+    els.valuePerPointResult.textContent =
+      "—";
+
     return;
   }
 
-  els.valuePerPointResult.textContent = formatearUSD(valorPip);
+  els.valuePerPointResult.textContent =
+    formatearUSD(valorPip);
 }
 
 function iniciar() {
   llenarSelectPares();
+
   inicializarEventos();
-  setRiskMode(RISK_SIMPLE);
-  mostrarValorPipDelPar(els.pairSelect.value);
+
+  setRiskMode(
+    RISK_SIMPLE
+  );
+
+  mostrarValorPipDelPar(
+    els.pairSelect.value
+  );
+
   calcularYMostrar();
 }
 
@@ -468,3 +621,4 @@ document.addEventListener(
   "DOMContentLoaded",
   iniciar
 );
+
