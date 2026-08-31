@@ -106,16 +106,13 @@ function calcularCierreParcial(lote) {
     return null;
   }
 
-  // El 33% se calcula igual para 1:1 y 1:2 porque ambos parten
-  // del mismo tamaño de lote total; lo que cambia es el R al que
-  // se cierra esa porción, no el tamaño de la porción en sí.
+
   const lotesACerrar =
     Math.round((lote * PARTIAL_CLOSE_PCT + Number.EPSILON) * 100) / 100;
 
   return lotesACerrar;
 }
 
-/* --- Cierre personalizado (lotaje + % a cerrar) --- */
 
 function calcularCierrePersonalizado(loteTotal, porcentaje) {
   if (!loteTotal || loteTotal <= 0) {
@@ -421,21 +418,36 @@ function setEstadoPill(estado) {
   }
 }
 
-function mostrarCierresParciales(lote) {
-  const lotesACerrar = calcularCierreParcial(lote);
 
-  if (lotesACerrar === null) {
+function mostrarCierresParciales(lote) {
+  if (!lote || lote <= 0) {
     els.partial1R.textContent = "0.00";
     els.partial2R.textContent = "0.00";
     return;
   }
 
-  // Mismo tamaño de lote a cerrar en ambos niveles (33% del total);
-  // el nivel 1:1 y 1:2 solo indican EN QUÉ punto de la operación
-  // se ejecuta ese cierre parcial.
-  els.partial1R.textContent = lotesACerrar.toFixed(2);
-  els.partial2R.textContent = lotesACerrar.toFixed(2);
+
+  const lote1R = Math.round(
+    (lote * PARTIAL_CLOSE_PCT + Number.EPSILON) * 100
+  ) / 100;
+
+
+  const restante1R = Math.max(
+    0,
+    Math.round(
+      (lote - lote1R + Number.EPSILON) * 100
+    ) / 100
+  );
+
+  const lote2R = Math.round(
+    (restante1R * PARTIAL_CLOSE_PCT + Number.EPSILON) * 100
+  ) / 100;
+
+  els.partial1R.textContent = lote1R.toFixed(2);
+  els.partial2R.textContent = lote2R.toFixed(2);
 }
+
+
 
 function mostrarResultados(resultado) {
   if (
@@ -584,8 +596,6 @@ function calcularYMostrar() {
     }
   }
 
-  // Si el usuario no ha tocado el cierre personalizado a mano,
-  // lo mantenemos sincronizado con el lote recién calculado.
   if (
     resultado.ok &&
     !els.customLotInput.dataset.tocado
@@ -720,8 +730,6 @@ function inicializarEventos() {
     );
   }
 
-  // Cierre personalizado: si el usuario edita el lotaje a mano,
-  // dejamos de autosincronizarlo con el resultado principal.
   els.customLotInput.addEventListener(
     "input",
     function () {
