@@ -155,9 +155,67 @@
         </div>
       </div>
 
+      <div class="divider"></div>
+
+      <h2 class="panel-title" style="margin-bottom: 14px;">
+        <span class="panel-index">03</span> Cierres parciales (33%)
+      </h2>
+
+      <div class="partial-grid">
+        <div class="result-card">
+          <span class="result-label">33% a cerrar en 1:1</span>
+          <span class="result-value" id="partial1R">0.00</span>
+          <span class="result-unit">lotes</span>
+        </div>
+        <div class="result-card">
+          <span class="result-label">33% a cerrar en 1:2</span>
+          <span class="result-value" id="partial2R">0.00</span>
+          <span class="result-unit">lotes</span>
+        </div>
+      </div>
+
+      <p class="hint partial-note">
+        ⚠️ Ten en cuenta cerrar parcial en <b>1:2</b> cuando el take profit final apunta a <b>1:3</b>, para asegurar ganancias en el camino.
+      </p>
+
     </aside>
 
   </main>
+
+  <section class="panel custom-close-panel" aria-labelledby="customCloseTitle">
+    <h2 id="customCloseTitle" class="panel-title">
+      <span class="panel-index">04</span> Calculadora de cierre personalizado
+    </h2>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="customLotInput">Lotaje total abierto</label>
+        <div class="input-wrap">
+          <input type="text" inputmode="decimal" id="customLotInput" placeholder="1.00">
+        </div>
+      </div>
+      <div class="field">
+        <label for="customPercentInput">Porcentaje a cerrar (%)</label>
+        <div class="input-wrap">
+          <input type="text" inputmode="decimal" id="customPercentInput" placeholder="23">
+          <span class="input-suffix">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-grid custom-close-grid">
+      <div class="result-card">
+        <span class="result-label">Lote restante</span>
+        <span class="result-value" id="customRemainingResult">0.00</span>
+        <span class="result-unit">lotes</span>
+      </div>
+      <div class="result-card">
+        <span class="result-label">Lote a cerrar</span>
+        <span class="result-value" id="customCloseResult">0.00</span>
+        <span class="result-unit">lotes</span>
+      </div>
+    </div>
+  </section>
 
   <footer class="app-footer">
     <span>1% Cálculo de lotaje y gestión riesgo</span>

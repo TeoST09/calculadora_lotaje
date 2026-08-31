@@ -602,6 +602,51 @@ input.is-invalid {
 }
 
 
+/* --- Partial closes (33% at 1:1 / 1:2) --- */
+
+.partial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.partial-grid .result-card {
+  border-color: rgba(45,212,126,0.28);
+}
+
+.partial-grid .result-value {
+  color: var(--green);
+}
+
+.partial-note {
+  background: rgba(234,179,8,0.08);
+  border: 1px solid rgba(234,179,8,0.28);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: #ffdb8a;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.partial-note b { color: #ffe8ab; }
+
+
+/* --- Custom close calculator --- */
+
+.custom-close-panel {
+  margin-top: 22px;
+}
+
+.custom-close-grid {
+  margin-bottom: 0;
+}
+
+.custom-close-grid .result-value {
+  color: var(--cyan-400);
+}
+
+
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
@@ -619,5 +664,5 @@ input.is-invalid {
   .result-value { font-size: 19px; }
   .result-card--accent .result-value { font-size: 25px; }
   .header-status { font-size: 11.5px; padding: 7px 12px; }
+  .partial-grid { grid-template-columns: 1fr; }
 }
-

@@ -97,6 +97,65 @@ function calcularLotaje(par, riesgoUSD, slPips, capital) {
   };
 }
 
+/* --- Cierres parciales (33% del lote) --- */
+
+const PARTIAL_CLOSE_PCT = 0.33;
+
+function calcularCierreParcial(lote) {
+  if (!lote || lote <= 0) {
+    return null;
+  }
+
+  // El 33% se calcula igual para 1:1 y 1:2 porque ambos parten
+  // del mismo tamaño de lote total; lo que cambia es el R al que
+  // se cierra esa porción, no el tamaño de la porción en sí.
+  const lotesACerrar =
+    Math.round((lote * PARTIAL_CLOSE_PCT + Number.EPSILON) * 100) / 100;
+
+  return lotesACerrar;
+}
+
+/* --- Cierre personalizado (lotaje + % a cerrar) --- */
+
+function calcularCierrePersonalizado(loteTotal, porcentaje) {
+  if (!loteTotal || loteTotal <= 0) {
+    return {
+      ok: false,
+      mensaje: "Ingresa el lotaje total abierto."
+    };
+  }
+
+  if (
+    porcentaje === null ||
+    porcentaje === undefined ||
+    isNaN(porcentaje) ||
+    porcentaje <= 0 ||
+    porcentaje > 100
+  ) {
+    return {
+      ok: false,
+      mensaje: "Ingresa un porcentaje entre 1 y 100."
+    };
+  }
+
+  const loteACerrar =
+    Math.round(
+      (loteTotal * (porcentaje / 100) + Number.EPSILON) * 100
+    ) / 100;
+
+  const loteRestante =
+    Math.max(
+      0,
+      Math.round((loteTotal - loteACerrar + Number.EPSILON) * 100) / 100
+    );
+
+  return {
+    ok: true,
+    loteACerrar,
+    loteRestante
+  };
+}
+
 const els = {
   pairSelect: document.getElementById("pairSelect"),
   capitalInput: document.getElementById("capitalInput"),
@@ -114,7 +173,13 @@ const els = {
   gaugeValue: document.getElementById("gaugeValue"),
   lotResult: document.getElementById("lotResult"),
   lossResult: document.getElementById("lossResult"),
-  valuePerPointResult: document.getElementById("valuePerPointResult")
+  valuePerPointResult: document.getElementById("valuePerPointResult"),
+  partial1R: document.getElementById("partial1R"),
+  partial2R: document.getElementById("partial2R"),
+  customLotInput: document.getElementById("customLotInput"),
+  customPercentInput: document.getElementById("customPercentInput"),
+  customCloseResult: document.getElementById("customCloseResult"),
+  customRemainingResult: document.getElementById("customRemainingResult")
 };
 
 function textoANumero(texto) {
@@ -356,6 +421,22 @@ function setEstadoPill(estado) {
   }
 }
 
+function mostrarCierresParciales(lote) {
+  const lotesACerrar = calcularCierreParcial(lote);
+
+  if (lotesACerrar === null) {
+    els.partial1R.textContent = "0.00";
+    els.partial2R.textContent = "0.00";
+    return;
+  }
+
+  // Mismo tamaño de lote a cerrar en ambos niveles (33% del total);
+  // el nivel 1:1 y 1:2 solo indican EN QUÉ punto de la operación
+  // se ejecuta ese cierre parcial.
+  els.partial1R.textContent = lotesACerrar.toFixed(2);
+  els.partial2R.textContent = lotesACerrar.toFixed(2);
+}
+
 function mostrarResultados(resultado) {
   if (
     !resultado ||
@@ -371,6 +452,8 @@ function mostrarResultados(resultado) {
       "$0.00";
 
     dibujarGauge(0);
+
+    mostrarCierresParciales(0);
 
     return;
   }
@@ -392,6 +475,10 @@ function mostrarResultados(resultado) {
 
   dibujarGauge(
     resultado.riesgoPctCapital
+  );
+
+  mostrarCierresParciales(
+    resultado.lote
   );
 }
 
@@ -496,6 +583,54 @@ function calcularYMostrar() {
         "—";
     }
   }
+
+  // Si el usuario no ha tocado el cierre personalizado a mano,
+  // lo mantenemos sincronizado con el lote recién calculado.
+  if (
+    resultado.ok &&
+    !els.customLotInput.dataset.tocado
+  ) {
+    els.customLotInput.value =
+      resultado.lote.toFixed(2);
+
+    calcularYMostrarCierrePersonalizado();
+  }
+}
+
+function calcularYMostrarCierrePersonalizado() {
+  const loteTotal =
+    textoANumero(
+      els.customLotInput.value
+    );
+
+  const porcentaje =
+    textoANumero(
+      els.customPercentInput.value
+    );
+
+  const resultado =
+    calcularCierrePersonalizado(
+      loteTotal,
+      porcentaje
+    );
+
+  if (!resultado.ok) {
+    els.customCloseResult.textContent =
+      "0.00";
+
+    els.customRemainingResult.textContent =
+      isNaN(loteTotal)
+        ? "0.00"
+        : loteTotal.toFixed(2);
+
+    return;
+  }
+
+  els.customCloseResult.textContent =
+    resultado.loteACerrar.toFixed(2);
+
+  els.customRemainingResult.textContent =
+    resultado.loteRestante.toFixed(2);
 }
 
 function inicializarEventos() {
@@ -584,6 +719,22 @@ function inicializarEventos() {
       }
     );
   }
+
+  // Cierre personalizado: si el usuario edita el lotaje a mano,
+  // dejamos de autosincronizarlo con el resultado principal.
+  els.customLotInput.addEventListener(
+    "input",
+    function () {
+      this.dataset.tocado = "1";
+
+      calcularYMostrarCierrePersonalizado();
+    }
+  );
+
+  els.customPercentInput.addEventListener(
+    "input",
+    calcularYMostrarCierrePersonalizado
+  );
 }
 
 function mostrarValorPipDelPar(par) {
@@ -615,10 +766,11 @@ function iniciar() {
   );
 
   calcularYMostrar();
+
+  calcularYMostrarCierrePersonalizado();
 }
 
 document.addEventListener(
   "DOMContentLoaded",
   iniciar
 );
-
