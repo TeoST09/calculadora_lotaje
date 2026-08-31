@@ -17,7 +17,7 @@ function obtenerValorPip(par) {
       return 12.35;
 
     case "XAUUSD":
-      return 1;
+      return 100;
 
     case "USTEC":
       return 1;
