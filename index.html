@@ -57,7 +57,17 @@
         <div class="field">
           <label for="pairSelect">Par / Instrumento</label>
           <div class="select-wrap">
-            <select id="pairSelect"></select>
+          <select id="pairSelect">
+              <option value="">Selecciona una opción</option>
+              <option value="10">EURUSD</option>n
+              <option value="10">GBPUSD</option>
+              <option value="10">AUDUSD</option>
+              <option value="7.19">USDCAD</option>
+              <option value="12.35">USDCHF</option>
+              <option value="100">XAUUSD</option>
+              <option value="1">USTEC</option>
+              <option value="10">USTEC-BULLFY</option>
+          </select>
           </div>
         </div>
       </div>
@@ -70,9 +80,6 @@
           <button type="button" class="segmented-btn is-active" data-mode="simple" role="tab" aria-selected="true">
             Riesgo simplificado
           </button>
-          <button type="button" class="segmented-btn" data-mode="full" role="tab" aria-selected="false">
-            Riesgo completo
-          </button>
         </div>
       </div>
 
@@ -84,10 +91,10 @@
           <input type="text" inputmode="decimal" id="riskAmountInput" placeholder="100.00">
         </div>
         <div class="chip-row">
-          <button type="button" class="chip" data-risk-amount="25">$25</button>
-          <button type="button" class="chip" data-risk-amount="50">$50</button>
-          <button type="button" class="chip" data-risk-amount="100">$100</button>
-          <button type="button" class="chip" data-risk-amount="200">$200</button>
+          <button type="button" class="chip" value="25">$25</button>
+          <button type="button" class="chip" value="50">$50</button>
+          <button type="button" class="chip" value="100">$100</button>
+          <button type="button" class="chip" value="200">$200</button>
         </div>
       </div>
 
@@ -129,16 +136,6 @@
         <span class="panel-index">02</span> Resultado
       </h2>
 
-      <div class="gauge-wrap">
-        <svg class="gauge" viewBox="0 0 220 140" aria-hidden="true">
-          <path class="gauge-track" d="M20 120 A 90 90 0 0 1 200 120" />
-          <path class="gauge-fill" id="gaugeFill" d="M20 120 A 90 90 0 0 1 200 120" />
-        </svg>
-        <div class="gauge-readout">
-          <span class="gauge-value" id="gaugeValue">0.00%</span>
-          <span class="gauge-label">del capital en riesgo</span>
-        </div>
-      </div>
 
       <div class="result-grid">
         <div class="result-card result-card--accent">
@@ -218,7 +215,9 @@
   </section>
 
   <footer class="app-footer">
-    <span>1% Cálculo de lotaje y gestión riesgo</span>
+    <span>1% Cálculo de lotaje y gestión riesgo</span> <br>
+    <span>Creado por TeoST </span> <br>
+    <span>&copy; 2026</span>
   </footer>
 
 </div>
