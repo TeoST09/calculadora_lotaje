@@ -7,7 +7,7 @@
 
 > Calculadora web para determinar el tamaño de lote de una operación en función del riesgo y la distancia al Stop Loss.
 
-[**Demo**](https://teost09.github.io/calculadora_de_lotaje/)
+[**Demo**](https://teost09.github.io/calculadora_lotaje/)
 
 ---
 
@@ -151,7 +151,7 @@ Después puedes abrir `index.html` directamente en el navegador o utilizar **Liv
 
 La aplicación está desplegada mediante GitHub Pages:
 
-**https://teost09.github.io/calculadora_de_lotaje/**
+**https://teost09.github.io/calculadora_lotaje/**
 
 ---
 
