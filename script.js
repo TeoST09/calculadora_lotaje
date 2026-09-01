@@ -125,7 +125,6 @@ function calcularParciales(){
 
 }
 
-
 calcularLote()
 calcularParciales()
 
