@@ -133,6 +133,10 @@ riesgo.addEventListener('input', calcularLote);
 riesgoSelect.addEventListener('input', calcularLote);
 sl.addEventListener('input', calcularLote);
 
+botones.forEach(boton => {
+    boton.addEventListener('click', calcularLote)
+})
+
 loteAbiertoInput.addEventListener('input', calcularParciales);
 lotePorcentajeInput.addEventListener('input', calcularParciales);
 
