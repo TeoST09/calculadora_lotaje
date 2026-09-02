@@ -70,6 +70,14 @@
           </select>
           </div>
         </div>
+        <div class="field">
+          <label>Modo 2 cuentas</label>
+          <div class="segmented" id="multipleModeToggle" role="tablist">
+            <button type="button" class="segmented-btn" data-mode="multiple" id="cuentaMultiple" role="tab" aria-selected="false">
+              Cuenta multiple
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -154,7 +162,24 @@
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="divider" id="tituloResultado2" style="display: none;">Cuenta 2</div>
+
+          <div class="result-grid" id="mostrarResultado2" style="display: none;">
+        <div class="result-card result-card--accent">
+          <span class="result-label">Tamaño de lote Segunda Cuenta</span>
+          <span class="result-value" id="lotResult2">0.00</span>
+        </div>
+        <div class="result-card">
+          <span class="result-label">Pérdida si toca SL</span>
+          <span class="result-value result-value--danger" id="lossResult2">$0.00</span>
+        </div>
+        <div class="result-card">
+          <span class="result-label">Valor por pip (1 lote)</span>
+          <span class="result-value" id="valuePerPointResult2">—</span>
+        </div>
+      </div>
+
+          <div class="divider"></div>
 
       <h2 class="panel-title" style="margin-bottom: 14px;">
         <span class="panel-index">03</span> Cierres parciales (33%)
@@ -169,6 +194,20 @@
         <div class="result-card">
           <span class="result-label">33% a cerrar en 1:2</span>
           <span class="result-value" id="partial2R">0.00</span>
+          <span class="result-unit">lotes</span>
+        </div>
+      </div>
+
+      <div class="divider" id="mostarParciales2" style="display: none;">Cuenta 2</div>
+      <div class="partial-grid" id="mostrarParciales2" style="display: none;">
+        <div class="result-card">
+          <span class="result-label">33% a cerrar en 1:1</span>
+          <span class="result-value" id="partial1R2">0.00</span>
+          <span class="result-unit">lotes</span>
+        </div>
+        <div class="result-card">
+          <span class="result-label">33% a cerrar en 1:2</span>
+          <span class="result-value" id="partial2R2">0.00</span>
           <span class="result-unit">lotes</span>
         </div>
       </div>
