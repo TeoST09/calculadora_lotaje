@@ -97,8 +97,10 @@ function calcularLote(){
     const valorRiesgo = parseFloat(riesgo.value)
     const valorSL = parseFloat(sl.value)
 
+    valorPuntoPip.textContent = isNaN(valorPip) ? "—" : valorPip
+    valorPuntoPip2.textContent = isNaN(valorPip) ? "—" : valorPip
+
     if(mostrarMultiple){
-            valorPuntoPip2.textContent = valorPip
          if(isNaN(valorPip) || isNaN(valorSL)){
                 status.classList.remove("is-valid");
                 status.classList.add("is-invalid");
@@ -145,7 +147,6 @@ function calcularLote(){
                 }
                 
         }else{
-            valorPuntoPip.textContent = valorPip
             if(isNaN(valorPip) || isNaN(valorSL)){
                 status.classList.remove("is-valid");
                 status.classList.add("is-invalid");
