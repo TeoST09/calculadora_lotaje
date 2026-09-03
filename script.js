@@ -61,7 +61,7 @@ const informacionPares = {
     "5": { valorPip: 12.35, par: "USDCHF" },
     "6": { valorPip: 100, par: "XAUUSD" },
     "7": { valorPip: 1, par: "USTEC" },
-    "8": { valorPip: 100, par: "USTEC-BULLFY" }
+    "8": { valorPip: 10, par: "USTEC-BULLFY" }
 }
 
 
