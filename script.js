@@ -1,3 +1,8 @@
+// Usuario
+const welcome = document.getElementById('welcomeModal')
+const welcomeInput = document.getElementById('welcomeName')
+const welcomeEntrar = document.getElementById('welcomeEntrar')
+const nombre = document.getElementById('userNameDisplay')
 
 // Entradas
 const select = document.getElementById('pairSelect')
@@ -44,6 +49,64 @@ footer.append(
 document.createElement("br"),
 'Versión 1.0.7'
 )
+
+//Herramientas adicionales
+const personalizarParciales = document.getElementById('toggleCustomPartials')
+const panelParciales = document.getElementById('customPartialsPanel')
+const primerCierrePersonalizado = document.getElementById('firstPartialInput')
+const segundoCierrePersonalizado = document.getElementById('secondPartialInput')
+const guardarParcialesPersonalizados = document.getElementById('saveCustomPartials')
+
+//Horario
+const horario = document.getElementById('hora')
+const sesion = document.getElementById('sesion')
+
+if(localStorage.getItem('usuario')){
+        nombre.textContent = localStorage.getItem('usuario')
+}
+
+function mostrarBienvenida() { 
+    const usuario = localStorage.getItem('usuario')
+    if (!usuario) {
+        welcome.removeAttribute('hidden')  
+    }else{
+        welcome.setAttribute('hidden', '')
+    }
+}
+
+function actualizarHora() {
+    const config = {
+        timeZone: 'America/Bogota',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    }
+
+    const configDia = {
+        timeZone: 'America/Bogota',
+        weekday: 'long',
+    }
+
+    const formateador = new Intl.DateTimeFormat('es-CO', config)
+    const formateadorDia = new Intl.DateTimeFormat('es-CO', configDia)
+
+    const obtenerHora = formateador.format(new Date())
+    const obtenerDia = formateadorDia.format(new Date())
+
+    if (obtenerDia == "viernes" && obtenerHora >= "5:00:00 p.m." || obtenerDia === "sábado" || obtenerDia === "domingo" && obtenerHora <= "5:00:00 p. m.") {
+        sesion.textContent = "Cerrado"
+    }else{
+        if (obtenerHora >= "2:00:00 a. m." && obtenerHora <= "5:00:00 a. m.") {
+            sesion.textContent = "Londres"
+        }else if (obtenerHora >= "7:00:00 a. m." && obtenerHora <= "12:00:00 p. m."){
+            sesion.textContent = "Nueva York"
+        }else{
+            sesion.textContent = "Sesion Asiatica"
+        }
+    }
+    document.getElementById('hora').textContent = obtenerHora
+}
 
 // Calculadora
 let bloqueado = false
@@ -119,14 +182,16 @@ function calcularLote(){
                 let partial1 = 0
                 let partial2 = 0
                 let lotaje = 0
+                const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
+                const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
                 
                 if(division!== 0){
-                    partial1 = (division * 33) / 100
+                    partial1 = (division * primerPorcentaje) / 100
                     primerCierre2.textContent = partial1.toFixed(2)
 
                     lotaje = division - partial1   
 
-                    partial2 = (lotaje * 33 / 100)
+                    partial2 = (lotaje * segundoPorcentaje) / 100
                     segundoCierre2.textContent = partial2.toFixed(2)
                 }else{
                 status.classList.remove("is-invalid");
@@ -170,17 +235,18 @@ function calcularLote(){
                 let partial1 = 0
                 let partial2 = 0
                 let lotaje = 0
-                
-                if(division!== 0){
-                    partial1 = (division * 33) / 100
-                    primerCierre.textContent = partial1.toFixed(2)
+                const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
+                const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
 
-                    lotaje = division - partial1   
+                if(division !== 0){
+                    partial1 = (division * primerPorcentaje) / 100
 
-                    partial2 = (lotaje * 33 / 100)
-                    segundoCierre.textContent = partial2.toFixed(2)
+                    lotaje = division - partial1
+
+                    partial2 = (lotaje * segundoPorcentaje) / 100
                 }
-
+                primerCierre.textContent = partial1.toFixed(2)
+                segundoCierre.textContent = partial2.toFixed(2)
 
                 status.classList.remove("is-invalid");
                 status.classList.add("is-valid");
@@ -221,6 +287,56 @@ function calcularParciales(){
 
 }
 
+//Eventos
+welcomeEntrar.addEventListener('click', function(){
+    const nombre = welcomeInput.value.trim()
+
+    if(nombre !== ""){
+        localStorage.setItem('usuario', nombre)
+        welcome.setAttribute('hidden', '')
+    }
+}) 
+
+personalizarParciales.addEventListener('click', function(){
+    const estaOculto = panelParciales.hasAttribute('hidden')
+
+    if(estaOculto){
+        panelParciales.removeAttribute('hidden')
+         panelParciales.classList.remove('is-hidden')
+    }else{
+        panelParciales.setAttribute('hidden', '')
+        panelParciales.classList.add('is-hidden')
+    }
+})
+
+guardarParcialesPersonalizados.addEventListener('click', function(){
+    const primerParcial = Number(
+        primerCierrePersonalizado.value.replace('%', '').trim()
+    )
+
+    const segundoParcial = Number(
+        segundoCierrePersonalizado.value.replace('%', '').trim()
+    )
+
+    if (primerParcial > 0 && segundoParcial > 0 && primerParcial + segundoParcial <= 100) {
+        localStorage.setItem('primerParcial', primerParcial)
+        localStorage.setItem('segundoParcial', segundoParcial)
+        primerParcialGuardado = primerParcial
+        segundoParcialGuardado = segundoParcial
+        statusPillText.textContent = "Cierres guardados correctamente"
+        calcularLote()
+    } else {
+        statusPillText.textContent = "Los cierres deben sumar 100% o menos"
+    }
+})
+
+let primerParcialGuardado = Number(localStorage.getItem('primerParcial'))
+let segundoParcialGuardado = Number(localStorage.getItem('segundoParcial'))
+
+if (primerParcialGuardado > 0 && segundoParcialGuardado > 0) {
+    primerCierrePersonalizado.value = primerParcialGuardado
+    segundoCierrePersonalizado.value = segundoParcialGuardado
+}
 
 botones.forEach(boton => {
     boton.addEventListener('click', function () {
@@ -313,5 +429,8 @@ lotePorcentajeInput.addEventListener('input', calcularParciales)
 calcularLote()
 calcularParciales()
 
+actualizarHora()
+setInterval(actualizarHora, 60)
 
+mostrarBienvenida()
 

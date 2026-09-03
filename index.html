@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" href="1.ico" type="image/x-icon">
+<link rel="icon" href="media/1.ico" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
@@ -16,6 +16,33 @@
 
 <div class="bg-grid" aria-hidden="true"></div>
 <div class="bg-glow" aria-hidden="true"></div>
+
+<section class="welcome-modal" id="welcomeModal" hidden aria-labelledby="welcomeModalTitle">
+  <div class="welcome-modal__window">
+    <div class="welcome-modal__visual" aria-hidden="true">
+      <img src="media/welcome.png" alt="">
+    </div>
+
+    <div class="welcome-modal__brand">
+      <span class="welcome-modal__brand-mark">1%</span>
+      <span>Espacio de trading</span>
+    </div>
+
+    <div class="welcome-modal__content">
+      <span class="welcome-modal__eyebrow">Primera visita</span>
+      <h2 id="welcomeModalTitle">¿Cómo quieres que te llamemos?</h2>
+      <p>Personaliza tu espacio antes de empezar a operar.</p>
+
+      <div id="welcomePanel" class="welcome-modal__form">
+        <label for="welcomeName">Tu nombre o alias</label>
+        <input type="text" id="welcomeName" placeholder="Ej. TeoST" autocomplete="name" minlength="3">
+        <button type="button" id="welcomeEntrar" class="welcome-modal__submit">Entrar a mi espacio <span aria-hidden="true">&#8594;</span></button>
+      </div>
+    </div>
+
+    <small class="welcome-modal__privacy">Tu nombre se guardará para reconocerte cuando vuelvas.</small>
+  </div>
+</section>
 
 <div class="app">
 
@@ -37,6 +64,20 @@
         <span>Calculadora de lotaje &amp; gestión de riesgo</span>
       </div>
     </div>
+    <div class="header-user" aria-label="Usuario actual">
+      <span class="header-user__label">Trader</span>
+      <strong id="userNameDisplay">Cargando...</strong>
+    </div>
+    <div class="header-market-info">
+      <div class="clock-display">
+        <span class="header-meta-label">Hora local</span>
+        <strong id="hora">Cargando...</strong>
+      </div>
+      <div class="session-display">
+        <span class="header-meta-label">Sesión</span>
+        <strong id="sesion">Cargando...</strong>
+      </div>
+    </div>
     <div class="header-actions">
       <button type="button" class="lock-button" id="bloquear" aria-label="Bloquear calculadora">
         <span class="lock-button__icon" aria-hidden="true">&#9632;</span>
@@ -48,6 +89,11 @@
       </div>
     </div>
   </header>
+
+  <div class="custom-partials-notice" role="note">
+    <span class="custom-partials-notice__mark" aria-hidden="true">+</span>
+    <span>Al final de la página encontrarás los parámetros personalizados.</span>
+  </div>
 
 
   <main class="layout">
@@ -265,6 +311,47 @@
         <span class="result-label">Lote a cerrar</span>
         <span class="result-value" id="customCloseResult">0.00</span>
         <span class="result-unit">lotes</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="custom-partials-section" aria-labelledby="customPartialsTitle">
+    <button type="button" class="custom-partials-toggle" id="toggleCustomPartials" aria-expanded="false" aria-controls="customPartialsPanel">
+      <span>
+        <span class="custom-partials-toggle__eyebrow">Herramienta adicional</span>
+        <strong id="customPartialsTitle">Cierres parciales personalizados</strong>
+      </span>
+      <span class="custom-partials-toggle__icon" aria-hidden="true">+</span>
+    </button>
+
+    <div class="custom-partials-panel panel is-hidden" id="customPartialsPanel" hidden>
+      <div class="custom-partials-heading">
+        <div>
+          <span class="panel-index">05</span>
+          <h2>Configura tus cierres</h2>
+        </div>
+        <p>Define el porcentaje de tu primer y segundo cierre.</p>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="firstPartialInput">Primer cierre (%)</label>
+          <div class="input-wrap">
+            <input type="text" inputmode="decimal" id="firstPartialInput" name="first_partial" placeholder="33">
+            <span class="input-suffix">%</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="secondPartialInput">Segundo cierre (%)</label>
+          <div class="input-wrap">
+            <input type="text" inputmode="decimal" id="secondPartialInput" name="second_partial" placeholder="33">
+            <span class="input-suffix">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-partials-footer">
+        <p class="hint">La suma de ambos porcentajes no debería superar el 100%.</p>
+        <button type="button" class="save-preference-button" id="saveCustomPartials">Guardar cierres</button>
       </div>
     </div>
   </section>
