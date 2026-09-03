@@ -17,10 +17,10 @@
 
 La herramienta permite calcular el tamaño de posición teniendo en cuenta:
 
-* Capital disponible.
-* Porcentaje de riesgo.
-* Dinero máximo a arriesgar.
-* Instrumento o par de divisas.
+* Dinero que quieres arriesgar.
+* Distancia del Stop Loss.
+* Valor del pip o punto del instrumento.
+* Instrumento o par seleccionado.
 
 El objetivo es evitar cálculos manuales y conocer rápidamente cuánto se está arriesgando antes de abrir una operación.
 
@@ -30,14 +30,15 @@ El objetivo es evitar cálculos manuales y conocer rápidamente cuánto se está
 
 * Cálculo automático del tamaño de lote.
 * Cálculo del riesgo monetario.
-* Cálculo del porcentaje de capital en riesgo.
 * Cálculo del valor por pip.
-* Dos modos de cálculo de riesgo:
-
-  * **Riesgo simplificado**
-  * **Riesgo completo**
-* Soporte de diferentes instrumentos financieros.
-* Indicador visual del nivel de riesgo.
+* Riesgo simplificado mediante una cantidad fija de dinero.
+* Botones rápidos para seleccionar riesgos de `$25`, `$50`, `$100` o `$200`.
+* Opción para trabajar con una segunda cuenta y consultar sus resultados por separado.
+* Cálculo de cierres parciales del 33% en los niveles 1:1 y 1:2.
+* Calculadora de cierre personalizado según el lotaje abierto y el porcentaje elegido.
+* Bloqueo de la calculadora para evitar cambios accidentales en los datos.
+* Indicador visual del estado de la calculadora y de la validación de los datos.
+* Soporte para diferentes pares e instrumentos financieros.
 * Resultados calculados directamente en el navegador.
 * Interfaz sencilla y responsive.
 
@@ -45,17 +46,18 @@ El objetivo es evitar cálculos manuales y conocer rápidamente cuánto se está
 
 ## Instrumentos
 
-La calculadora permite trabajar con diferentes instrumentos, entre ellos:
+La calculadora permite trabajar con los siguientes instrumentos:
 
-| Instrumento | Ejemplo                        |
-| ----------- | ------------------------------ |
-| Forex       | EURUSD                         |
-| Forex       | GBPUSD                         |
-| Forex       | AUDUSD                         |
-| Forex       | USDCHF                         |
-| Forex       | USDCAD                         |
-| Forex       | NASDAQ                         |
-| Otros       | Según configuración disponible |
+| Instrumento | Valor por pip/punto |
+| ----------- | ------------------- |
+| EURUSD      | 10                  |
+| GBPUSD      | 10                  |
+| AUDUSD      | 10                  |
+| USDCAD      | 7.19                |
+| USDCHF      | 12.35               |
+| XAUUSD      | 100                 |
+| USTEC       | 1                   |
+| USTEC-BULLFY| 100                 |
 
 ---
 
@@ -65,12 +67,9 @@ La calculadora permite trabajar con diferentes instrumentos, entre ellos:
 
 Selecciona el par o instrumento financiero sobre el que quieres realizar el cálculo.
 
-### 2. Seleccionar el tipo de riesgo
+### 2. Introducir el riesgo
 
-Puedes elegir entre los diferentes modos disponibles:
-
-* **Riesgo simplificado:** introduces directamente la cantidad de dinero que quieres arriesgar.
-* **Riesgo completo:** introduces el capital disponible y el porcentaje de riesgo.
+Introduce directamente la cantidad de dinero que quieres arriesgar o utiliza uno de los botones rápidos disponibles.
 
 ### 3. Introducir el Stop Loss
 
@@ -84,22 +83,35 @@ La calculadora mostrará automáticamente:
 * Dinero arriesgado.
 * Pérdida estimada.
 * Valor por pip/punto.
-* Porcentaje del capital en riesgo.
+* Par o instrumento seleccionado.
+
+### 5. Usar una segunda cuenta
+
+Cuando la primera cuenta tenga datos válidos, activa **Cuenta multiple**. La calculadora mostrará un segundo bloque para introducir el riesgo de la otra cuenta y calcular sus resultados de forma independiente.
+
+### 6. Calcular cierres parciales
+
+El resultado principal incluye dos cierres parciales del 33% del lotaje: uno en 1:1 y otro en 1:2.
+
+También puedes utilizar la calculadora de cierre personalizado. Introduce el lotaje total abierto y el porcentaje que quieres cerrar para conocer cuánto cerrar y cuánto lote quedará restante.
+
+### 7. Bloquear la calculadora
+
+Pulsa **Bloquear** cuando termines de introducir los datos. Esta opción desactiva los campos principales, la selección del instrumento, los botones rápidos y el modo de segunda cuenta hasta que vuelvas a desbloquearla.
 
 ---
 
 ## Ejemplo
 
-Supongamos una cuenta con:
+Supongamos una operación con:
 
 ```text
-Capital:       $1,000
-Riesgo:        1%
-Riesgo máximo: $10
+Dinero a arriesgar: $100
+Instrumento:       EURUSD
 Stop Loss:     50 pips
 ```
 
-La calculadora utilizará estos valores junto con el instrumento seleccionado para determinar el tamaño de posición correspondiente.
+Como el EURUSD tiene un valor de 10 por pip para un lote, la calculadora mostrará un tamaño aproximado de **0.20 lotes**.
 
 ---
 
@@ -113,6 +125,10 @@ El proyecto está desarrollado utilizando tecnologías web estándar:
 * **GitHub Pages** — despliegue.
 
 No requiere backend ni base de datos.
+
+## Versión
+
+Versión actual: **1.0.7**.
 
 ---
 

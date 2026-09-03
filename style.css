@@ -649,6 +649,10 @@ input.is-invalid {
   text-align: center;
 }
 
+.app-footer span {
+  display: block;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
