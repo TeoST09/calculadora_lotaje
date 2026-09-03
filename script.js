@@ -3,8 +3,7 @@ const select = document.getElementById('pairSelect')
 
 const riesgoSelect = document.getElementById('riskPercentSelect')
 
-const riesgo = document.getElementById('riskAmountInput')
-const sl = document.getElementById('slPipsInput')
+
 const resultado = document.getElementById('lotResult')
 
 const valorPuntoPip = document.getElementById('valuePerPointResult')
@@ -13,6 +12,8 @@ const perdidaSL = document.getElementById('lossResult')
 const resultado2 = document.getElementById('lotResult2')
 const perdidaSL2 = document.getElementById('lossResult2')
 
+const riesgo = document.getElementById('riskAmountInput')
+const sl = document.getElementById('slPipsInput')
 const botones = document.querySelectorAll('.chip')
 
 
@@ -39,6 +40,9 @@ const mostrarParciales2 = document.getElementById('mostrarParciales2')
 const tituloParciales2 = document.getElementById('mostarParciales2')
 const valorPuntoPip2 = document.getElementById('valuePerPointResult2')
 
+const parSeleccionado1 = document.getElementById('parSeleccionado1')
+const parSeleccionado2 = document.getElementById('parSeleccionado2')
+
 let resultadoCuenta1 = false
 let mostrarMultiple = false
 let riesgoCuenta1 = ""
@@ -50,6 +54,38 @@ botones.forEach(boton => {
     })
 });
 
+let bloqueado = false
+
+bloquear.addEventListener('click', function(){
+
+    if(bloqueado){
+        bloqueado = false
+        bloquear.classList.remove('is-active')
+        select.disabled = false
+        riesgo.readOnly = false
+        sl.readOnly = false
+        cuentaMultiple.disabled = false
+        botones.forEach(boton => {
+            boton.style.display = "flex"
+        })
+        status.classList.remove("is-valid");
+        status.classList.remove("is-invalid");
+        statusPillText.textContent = "Se ha desbloqueado la calculadora 🔓"
+    }else{
+        bloqueado = true
+        bloquear.classList.add('is-active')
+        select.disabled = true
+        riesgo.readOnly = true
+        sl.readOnly = true
+        cuentaMultiple.disabled = true
+        botones.forEach(boton => {
+            boton.style.display = "none"
+        })
+        status.classList.remove("is-invalid");
+        status.classList.add("is-valid");
+        statusPillText.textContent = "Se ha bloqueado la calculadora 🔒"
+    }
+})
 
 cuentaMultiple.addEventListener('click', function cuentaMultipleF(){
 
@@ -83,7 +119,7 @@ cuentaMultiple.addEventListener('click', function cuentaMultipleF(){
         tituloParciales2.style.display = "block"
         mostrarParciales2.style.display = "grid"
         mostrarMultiple = true
-        calcularLote()
+
     }else{
             cuentaMultiple.classList.remove('is-active')
             cuentaMultiple.setAttribute('aria-selected', 'false')
@@ -91,8 +127,33 @@ cuentaMultiple.addEventListener('click', function cuentaMultipleF(){
     }
 })
 
+const informacionPares = {
+    "1": { valorPip: 10, par: "EURUSD" },
+    "2": { valorPip: 10, par: "GBPUSD" },
+    "3": { valorPip: 10, par: "AUDUSD" },
+    "4": { valorPip: 7.19, par: "USDCAD" },
+    "5": { valorPip: 12.35, par: "USDCHF" },
+    "6": { valorPip: 100, par: "XAUUSD" },
+    "7": { valorPip: 1, par: "USTEC" },
+    "8": { valorPip: 100, par: "USTEC-BULLFY" }
+};
+
+let valorPipTable = 0
+let nombrePar = ""
+function actualizarPar(){
+    const opcionElegida = select.value
+
+    const selectPar = informacionPares[opcionElegida] || {valorPip: 0, par: "-"}
+
+    valorPipTable = selectPar.valorPip
+    nombrePar = selectPar.par
+    calcularLote()
+}
+
 function calcularLote(){
-    const valorPip = parseFloat(select.value)
+
+    valorPip = valorPipTable
+
     const valorRiesgoSelect = parseFloat(riesgoSelect.value)
     const valorRiesgo = parseFloat(riesgo.value)
     const valorSL = parseFloat(sl.value)
@@ -124,6 +185,7 @@ function calcularLote(){
                 status.classList.remove("is-invalid");
                 status.classList.add("is-valid");
                 statusPillText.textContent = "Valido ✅";
+                parSeleccionado2.textContent = nombrePar
 
                 let partial1 = 0
                 let partial2 = 0
@@ -145,8 +207,8 @@ function calcularLote(){
                 }
                 
         }else{
-            valorPuntoPip.textContent = isNaN(valorPip) ? "—" : valorPip
-            if(isNaN(valorPip) || isNaN(valorSL)){
+        valorPuntoPip.textContent = valorPip || "—";
+        if(isNaN(valorPip) || isNaN(valorSL)){
                 status.classList.remove("is-valid");
                 status.classList.add("is-invalid");
                 statusPillText.textContent = "Faltan datos esenciales";
@@ -197,6 +259,7 @@ function calcularLote(){
                 resultadoCuenta1 = true
                 riesgoCuenta1 = riesgo.value
                 resultado.textContent = division.toFixed(2)
+                parSeleccionado1.textContent = nombrePar
                 return
         }
         }
@@ -232,14 +295,14 @@ function calcularParciales(){
 calcularLote()
 calcularParciales()
 
-select.addEventListener('change', calcularLote);
-riesgo.addEventListener('input', calcularLote);
-riesgoSelect.addEventListener('input', calcularLote);
-sl.addEventListener('input', calcularLote);
+riesgo.addEventListener('input', () => calcularLote());
+riesgoSelect.addEventListener('input', () => calcularLote());
+sl.addEventListener('input', () => calcularLote());
+select.addEventListener('change', actualizarPar)
 
 botones.forEach(boton => {
-    boton.addEventListener('click', calcularLote)
-})
+    boton.addEventListener('click', () => calcularLote());
+});
 
 loteAbiertoInput.addEventListener('input', calcularParciales);
 lotePorcentajeInput.addEventListener('input', calcularParciales);

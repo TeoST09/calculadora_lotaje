@@ -37,9 +37,15 @@
         <span>Calculadora de lotaje &amp; gestión de riesgo</span>
       </div>
     </div>
-    <div class="header-status" id="statusPill">
-      <span class="status-dot"></span>
-      <span id="statusPillText">Esperando datos</span>
+    <div class="header-actions">
+      <button type="button" class="lock-button" id="bloquear" aria-label="Bloquear calculadora">
+        <span class="lock-button__icon" aria-hidden="true">&#9632;</span>
+        <span>Bloquear</span>
+      </button>
+      <div class="header-status" id="statusPill">
+        <span class="status-dot"></span>
+        <span id="statusPillText">Esperando datos</span>
+      </div>
     </div>
   </header>
 
@@ -59,14 +65,14 @@
           <div class="select-wrap">
           <select id="pairSelect">
               <option value="">Selecciona una opción</option>
-              <option value="10">EURUSD</option>
-              <option value="10">GBPUSD</option>
-              <option value="10">AUDUSD</option>
-              <option value="7.19">USDCAD</option>
-              <option value="12.35">USDCHF</option>
-              <option value="100">XAUUSD</option>
-              <option value="1">USTEC</option>
-              <option value="10">USTEC-BULLFY</option>
+              <option value="1">EURUSD</option>
+              <option value="2">GBPUSD</option>
+              <option value="3">AUDUSD</option>
+              <option value="4">USDCAD</option>
+              <option value="5">USDCHF</option>
+              <option value="6">XAUUSD</option>
+              <option value="7">USTEC</option>
+              <option value="8">USTEC-BULLFY</option>
           </select>
           </div>
         </div>
@@ -160,11 +166,15 @@
           <span class="result-label">Valor por pip (1 lote)</span>
           <span class="result-value" id="valuePerPointResult">—</span>
         </div>
+        <div class="result-card">
+          <span class="result-label">Par Seleccionado</span>
+          <span class="result-value" id="parSeleccionado1">—</span>
+        </div>
       </div>
 
       <div class="divider" id="tituloResultado2" style="display: none;">Cuenta 2</div>
 
-          <div class="result-grid" id="mostrarResultado2" style="display: none;">
+      <div class="result-grid" id="mostrarResultado2" style="display: none;">
         <div class="result-card result-card--accent">
           <span class="result-label">Tamaño de lote Segunda Cuenta</span>
           <span class="result-value" id="lotResult2">0.00</span>
@@ -177,9 +187,13 @@
           <span class="result-label">Valor por pip (1 lote)</span>
           <span class="result-value" id="valuePerPointResult2">—</span>
         </div>
+        <div class="result-card">
+          <span class="result-label">Par Seleccionado</span>
+          <span class="result-value" id="parSeleccionado2">—</span>
+        </div>
       </div>
 
-          <div class="divider"></div>
+      <div class="divider"></div>
 
       <h2 class="panel-title" style="margin-bottom: 14px;">
         <span class="panel-index">03</span> Cierres parciales (33%)
