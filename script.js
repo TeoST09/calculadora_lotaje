@@ -101,12 +101,14 @@ function actualizarHora() {
     const obtenerHora = formateador.format(new Date())
     const obtenerDia = formateadorDia.format(new Date())
 
-    if (obtenerDia == "viernes" && obtenerHora >= "5:00:00 p.m." || obtenerDia === "sábado" || obtenerDia === "domingo" && obtenerHora <= "5:00:00 p. m.") {
+    const horaActualC = parseInt(obtenerHora.split(":")[0]);
+
+    if (obtenerDia == "viernes" && horaActualC >= 17 || obtenerDia === "sábado" || obtenerDia === "domingo" && horaActualC <= 17) {
         sesion.textContent = "Cerrado"
     }else{
-        if (obtenerHora >= "2:00:00 a. m." && obtenerHora <= "5:00:00 a. m.") {
+        if (horaActualC >= 2 && horaActualC < 5) {
             sesion.textContent = "Londres"
-        }else if (obtenerHora >= "7:00:00 a. m." && obtenerHora <= "12:00:00 p. m."){
+        }else if (horaActualC >= 7 && horaActualC < 12){
             sesion.textContent = "Nueva York"
         }else{
             sesion.textContent = "Sesion Asiatica"
