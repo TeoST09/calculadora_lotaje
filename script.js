@@ -34,6 +34,13 @@ const lotePorcentajeInput = document.getElementById('customPercentInput')
 const loteRestante = document.getElementById('customRemainingResult')
 const loteCerrar = document.getElementById('customCloseResult')
 
+//Cierres labels
+
+const labelPartial1 = document.getElementById('partial1Label')
+const labelPartial2 = document.getElementById('partial2Label')
+const labelPartial1_2 = document.getElementById('partial1Label2')
+const labelPartial2_2 = document.getElementById('partial2Label2')
+
 // Estado interfaz
 const status = document.querySelector('.header-status')
 const statusPillText = document.getElementById('statusPillText')
@@ -47,7 +54,7 @@ const footer = document.getElementById('footer')
 
 footer.append(
 document.createElement("br"),
-'Versión 1.0.7'
+'Versión 1.0.9'
 )
 
 //Herramientas adicionales
@@ -184,6 +191,9 @@ function calcularLote(){
                 let lotaje = 0
                 const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
                 const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
+
+                labelPartial1_2.textContent = `${primerPorcentaje}% a cerrar en 1:1`
+                labelPartial2_2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
                 
                 if(division!== 0){
                     partial1 = (division * primerPorcentaje) / 100
@@ -237,6 +247,8 @@ function calcularLote(){
                 let lotaje = 0
                 const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
                 const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
+                labelPartial1.textContent = `${primerPorcentaje}% a cerrar en 1:1`
+                labelPartial2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
 
                 if(division !== 0){
                     partial1 = (division * primerPorcentaje) / 100
@@ -289,10 +301,11 @@ function calcularParciales(){
 
 //Eventos
 welcomeEntrar.addEventListener('click', function(){
-    const nombre = welcomeInput.value.trim()
+    const nombreIngresado = welcomeInput.value.trim()
 
-    if(nombre !== ""){
-        localStorage.setItem('usuario', nombre)
+    if(nombreIngresado !== ""){
+        localStorage.setItem('usuario', nombreIngresado)
+        nombre.textContent = localStorage.getItem('usuario')
         welcome.setAttribute('hidden', '')
     }
 }) 
@@ -323,9 +336,15 @@ guardarParcialesPersonalizados.addEventListener('click', function(){
         localStorage.setItem('segundoParcial', segundoParcial)
         primerParcialGuardado = primerParcial
         segundoParcialGuardado = segundoParcial
-        statusPillText.textContent = "Cierres guardados correctamente"
+        panelParciales.setAttribute('hidden', '')
+        panelParciales.classList.add('is-hidden')
         calcularLote()
+        status.classList.remove('is-invalid')
+        status.classList.add('is-valid')
+        statusPillText.textContent = "Cierres guardados correctamente"
     } else {
+        status.classList.remove('is-valid')
+        status.classList.add('is-invalid')
         statusPillText.textContent = "Los cierres deben sumar 100% o menos"
     }
 })
@@ -430,7 +449,7 @@ calcularLote()
 calcularParciales()
 
 actualizarHora()
-setInterval(actualizarHora, 60)
+setInterval(actualizarHora, 1000)
 
 mostrarBienvenida()
 

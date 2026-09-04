@@ -47,37 +47,40 @@
 <div class="app">
 
 
-  <header class="app-header">
+  <div class="header-market-info" aria-label="Información de mercado">
+    <div class="clock-display">
+      <span class="header-meta-label">Hora local</span>
+      <strong id="hora">Cargando...</strong>
+    </div>
+    <div class="session-display">
+      <span class="header-meta-label">Sesión</span>
+      <strong id="sesion">Cargando...</strong>
+    </div>
+  </div>
+
+  <nav class="app-header" aria-label="Navegación principal">
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 30 L14 18 L20 24 L36 8" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M27 8 H36 V17" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <defs>
           <linearGradient id="g1" x1="4" y1="30" x2="36" y2="8" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#3B82F6"/>
-            <stop offset="1" stop-color="#22D3EE"/>
+            <stop stop-color="#38FF80"/>
+            <stop offset="1" stop-color="#B0FFCC"/>
           </linearGradient>
         </defs>
       </svg>
       <div class="brand-text">
         <h1>1%</h1>
-        <span>Calculadora de lotaje &amp; gestión de riesgo</span>
       </div>
     </div>
     <div class="header-user" aria-label="Usuario actual">
       <span class="header-user__label">Trader</span>
       <strong id="userNameDisplay">Cargando...</strong>
     </div>
-    <div class="header-market-info">
-      <div class="clock-display">
-        <span class="header-meta-label">Hora local</span>
-        <strong id="hora">Cargando...</strong>
-      </div>
-      <div class="session-display">
-        <span class="header-meta-label">Sesión</span>
-        <strong id="sesion">Cargando...</strong>
-      </div>
-    </div>
+  </nav>
+
+  <div class="header-tools">
     <div class="header-actions">
       <button type="button" class="lock-button" id="bloquear" aria-label="Bloquear calculadora">
         <span class="lock-button__icon" aria-hidden="true">&#9632;</span>
@@ -88,7 +91,7 @@
         <span id="statusPillText">Esperando datos</span>
       </div>
     </div>
-  </header>
+  </div>
 
   <div class="custom-partials-notice" role="note">
     <span class="custom-partials-notice__mark" aria-hidden="true">+</span>
@@ -242,17 +245,17 @@
       <div class="divider"></div>
 
       <h2 class="panel-title" style="margin-bottom: 14px;">
-        <span class="panel-index">03</span> Cierres parciales (33%)
+        <span class="panel-index">03</span> Cierres parciales
       </h2>
 
       <div class="partial-grid">
         <div class="result-card">
-          <span class="result-label">33% a cerrar en 1:1</span>
+          <span class="result-label" id="partial1Label">--Esperando Datos--</span>
           <span class="result-value" id="partial1R">0.00</span>
           <span class="result-unit">lotes</span>
         </div>
         <div class="result-card">
-          <span class="result-label">33% a cerrar en 1:2</span>
+          <span class="result-label" id="partial2Label">--Esperando Datos--</span>
           <span class="result-value" id="partial2R">0.00</span>
           <span class="result-unit">lotes</span>
         </div>
@@ -261,12 +264,12 @@
       <div class="divider" id="mostarParciales2" style="display: none;">Cuenta 2</div>
       <div class="partial-grid" id="mostrarParciales2" style="display: none;">
         <div class="result-card">
-          <span class="result-label">33% a cerrar en 1:1</span>
+          <span class="result-label" id="partial1Label2">--Esperando Datos--</span>
           <span class="result-value" id="partial1R2">0.00</span>
           <span class="result-unit">lotes</span>
         </div>
         <div class="result-card">
-          <span class="result-label">33% a cerrar en 1:2</span>
+          <span class="result-label" id="partial2Label2">--Esperando Datos--</span>
           <span class="result-value" id="partial2R2">0.00</span>
           <span class="result-unit">lotes</span>
         </div>
