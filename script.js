@@ -68,18 +68,34 @@ const guardarParcialesPersonalizados = document.getElementById('saveCustomPartia
 const horario = document.getElementById('hora')
 const sesion = document.getElementById('sesion')
 
-if(localStorage.getItem('usuario')){
-        nombre.textContent = localStorage.getItem('usuario')
-}
+class Usuario{
+    constructor(nombre){
+        this.nombre = localStorage.getItem('usuario')
+    }
+    
+    get obtenerNombre(){
+        return this.nombre 
+    }
 
-function mostrarBienvenida() { 
-    const usuario = localStorage.getItem('usuario')
-    if (!usuario) {
-        welcome.removeAttribute('hidden')  
-    }else{
-        welcome.setAttribute('hidden', '')
+    iniciar(){
+        if(!this.obtenerNombre){
+             welcome.removeAttribute('hidden') 
+        }else{
+            welcome.setAttribute('hidden', '')
+        }
+    }
+
+    mostrar(){
+        if(this.obtenerNombre){
+            nombre.textContent = this.obtenerNombre
+        }
     }
 }
+
+let usuario = new Usuario ()
+usuario.iniciar()
+usuario.mostrar()
+
 
 function actualizarHora() {
     const config = {
@@ -117,9 +133,9 @@ function actualizarHora() {
                 sesion.textContent = "Londres"
             }else if (horaActualC >= 7 && horaActualC < 12){
                 sesion.textContent = "Nueva York"
-            }else{
-                sesion.textContent = "Sesion Asiatica"
             }
+        }else{
+            sesion.textContent = "Sesion Asiática"
         }
     }
     document.getElementById('hora').textContent = obtenerHora
@@ -460,6 +476,3 @@ calcularParciales()
 
 actualizarHora()
 setInterval(actualizarHora, 1000)
-
-mostrarBienvenida()
-
