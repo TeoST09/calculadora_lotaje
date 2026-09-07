@@ -68,80 +68,8 @@ const guardarParcialesPersonalizados = document.getElementById('saveCustomPartia
 const horario = document.getElementById('hora')
 const sesion = document.getElementById('sesion')
 
-class Usuario{
-    constructor(nombre){
-        this.nombre = localStorage.getItem('usuario')
-    }
-    
-    get obtenerNombre(){
-        return this.nombre 
-    }
+//Calculadora
 
-    iniciar(){
-        if(!this.obtenerNombre){
-             welcome.removeAttribute('hidden') 
-        }else{
-            welcome.setAttribute('hidden', '')
-        }
-    }
-
-    mostrar(){
-        if(this.obtenerNombre){
-            nombre.textContent = this.obtenerNombre
-        }
-    }
-}
-
-let usuario = new Usuario ()
-usuario.iniciar()
-usuario.mostrar()
-
-
-function actualizarHora() {
-    const config = {
-        timeZone: 'America/Bogota',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-    }
-
-    const configDia = {
-        timeZone: 'America/Bogota',
-        weekday: 'long',
-    }
-
-    const formateador = new Intl.DateTimeFormat('es-CO', config)
-    const formateadorDia = new Intl.DateTimeFormat('es-CO', configDia)
-
-    const obtenerHora = formateador.format(new Date())
-    const obtenerDia = formateadorDia.format(new Date())
-
-    const parte = formateador.formatToParts(new Date())
-
-    const partePeriodo = parte.find(parte => parte.type === 'dayPeriod')
-    const obtenerAmPm = partePeriodo ? partePeriodo.value : ''
-
-    const horaActualC = parseInt(obtenerHora.split(":")[0]);
-
-    if (obtenerDia == "viernes" && horaActualC >= 5 && obtenerAmPm == "p. m." || obtenerDia === "sábado" || 
-        obtenerDia === "domingo" && horaActualC <= 5 && obtenerAmPm == "p. m.") {
-        sesion.textContent = "Cerrado"
-    }else{
-        if(obtenerAmPm == "a. m."){
-            if (horaActualC >= 2 && horaActualC < 5) {
-                sesion.textContent = "Londres"
-            }else if (horaActualC >= 7 && horaActualC < 12){
-                sesion.textContent = "Nueva York"
-            }
-        }else{
-            sesion.textContent = "Sesion Asiática"
-        }
-    }
-    document.getElementById('hora').textContent = obtenerHora
-}
-
-// Calculadora
 let bloqueado = false
 let resultadoCuenta1 = false
 let mostrarMultiple = false
@@ -164,16 +92,175 @@ const informacionPares = {
 let valorPipTable = 0
 let nombrePar = ''
 
+//Clases
 
-function actualizarPar() {
-    const opcionElegida = select.value
+class Usuario{
+    constructor(nombre){
+        this.nombre = localStorage.getItem('usuario')
+    }
+    
+    get obtenerNombre(){
+        return this.nombre 
+    }
 
-    const selectPar = informacionPares[opcionElegida] || {valorPip: 0, par: "-"}
+    iniciar(){
+        if(!this.obtenerNombre){
+             welcome.removeAttribute('hidden') 
+        }else{
+            welcome.setAttribute('hidden', '')
+        }
+    }
 
-    valorPipTable = selectPar.valorPip
-    nombrePar = selectPar.par
-    calcularLote()
+    crear(){
+        const nombreIngresado = welcomeInput.value.trim()
+        if(nombreIngresado !== ""){
+            localStorage.setItem('usuario', nombreIngresado)
+            nombre.textContent = localStorage.getItem('usuario')
+            welcome.setAttribute('hidden', '')
+        }
+    }
+
+    mostrar(){
+        if(this.obtenerNombre){
+            nombre.textContent = this.obtenerNombre
+        }
+    }
 }
+
+class MercadoHora {
+    constructor() {
+        this.horaEl = document.getElementById('hora')
+        this.sesionEl = document.getElementById('sesion')
+    }
+
+    actualizarHora() {
+        const config = {
+            timeZone: 'America/Bogota',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        }
+
+        const configDia = {
+            timeZone: 'America/Bogota',
+            weekday: 'long'
+        }
+
+        const formateador = new Intl.DateTimeFormat('es-CO', config)
+        const formateadorDia = new Intl.DateTimeFormat('es-CO', configDia)
+
+        const obtenerHora = formateador.format(new Date())
+        const obtenerDia = formateadorDia.format(new Date())
+        const parte = formateador.formatToParts(new Date())
+        const partePeriodo = parte.find(parte => parte.type === 'dayPeriod')
+        const obtenerAmPm = partePeriodo ? partePeriodo.value : ''
+        const horaActualC = parseInt(obtenerHora.split(':')[0])
+
+        if ((obtenerDia === 'viernes' && horaActualC >= 5 && obtenerAmPm === 'p. m.') ||
+            obtenerDia === 'sábado' ||
+            (obtenerDia === 'domingo' && horaActualC <= 5 && obtenerAmPm === 'p. m.')) {
+            this.sesionEl.textContent = 'Cerrado'
+        } else {
+            if (obtenerAmPm === 'a. m.') {
+                if (horaActualC >= 2 && horaActualC < 5) {
+                    this.sesionEl.textContent = 'Londres'
+                } else if (horaActualC >= 7 && horaActualC < 12) {
+                    this.sesionEl.textContent = 'Nueva York'
+                }
+            } else {
+                this.sesionEl.textContent = 'Sesion Asiática'
+            }
+        }
+
+        this.horaEl.textContent = obtenerHora
+    }
+}
+
+
+class Calculadora {
+    constructor() {
+        this.bloqueado = false
+        this.resultadoCuenta1 = false
+        this.mostrarMultiple = false
+        this.riesgoCuenta1 = ''
+        this.valorPip = 0
+        this.valorPipTable = 0
+        this.nombrePar = ''
+        this.primerParcialGuardado = Number(localStorage.getItem('primerParcial'))
+        this.segundoParcialGuardado = Number(localStorage.getItem('segundoParcial'))
+    }
+
+    actualizarPar() {
+        const opcionElegida = select.value
+        const selectPar = informacionPares[opcionElegida] || { valorPip: 0, par: '-' }
+
+        this.valorPipTable = selectPar.valorPip
+        this.nombrePar = selectPar.par
+        valorPipTable = this.valorPipTable
+        nombrePar = this.nombrePar
+        this.calcularLote()
+    }
+
+    calcularLote() {
+        calcularLote()
+    }
+
+    calcularParciales() {
+        const loteAbierto = parseFloat(loteAbiertoInput.value)
+        const lotePorcentaje = Number(lotePorcentajeInput.value)
+
+        if (loteAbierto !== 0 && lotePorcentaje !== 0) {
+            const calcularCierreParcial = loteAbierto * lotePorcentaje / 100
+            const loteRestanteParcial = loteAbierto - calcularCierreParcial
+
+            loteCerrar.textContent = calcularCierreParcial.toFixed(2)
+            loteRestante.textContent = loteRestanteParcial.toFixed(2)
+            status.classList.remove('is-invalid')
+            status.classList.add('is-valid')
+            statusPillText.textContent = 'Valido ✅'
+        } else {
+            status.classList.remove('is-valid')
+            status.classList.add('is-invalid')
+            statusPillText.textContent = 'Faltan Datos'
+        }
+    }
+
+    bloqueo() {
+        this.bloqueado = !this.bloqueado
+
+        if (this.bloqueado) {
+            bloquear.classList.add('is-active')
+            select.disabled = true
+            riesgo.readOnly = true
+            sl.readOnly = true
+            cuentaMultiple.disabled = true
+            botones.forEach(boton => {
+                boton.style.display = 'none'
+            })
+            status.classList.remove('is-invalid')
+            status.classList.add('is-valid')
+            statusPillText.textContent = 'Se ha bloqueado la calculadora 🔒'
+        } else {
+            bloquear.classList.remove('is-active')
+            select.disabled = false
+            riesgo.readOnly = false
+            sl.readOnly = false
+            cuentaMultiple.disabled = false
+            botones.forEach(boton => {
+                boton.style.display = 'flex'
+            })
+            status.classList.remove('is-valid')
+            status.classList.remove('is-invalid')
+            statusPillText.textContent = 'Se ha desbloqueado la calculadora 🔓'
+        }
+    }
+}
+
+
+//Funciones
+
+// Calculadora
 
 function calcularLote(){
 
@@ -297,43 +384,9 @@ function calcularLote(){
         }
         }
 
-function calcularParciales(){
-    const loteAbierto = parseFloat(loteAbiertoInput.value)
-    const lotePorcentaje = Number(lotePorcentajeInput.value)
-
-    let calcularCierreParcial = 0
-    let loteRestanteParcial = 0
-
-    if (loteAbierto !== 0 && lotePorcentaje !== 0){
-
-        calcularCierreParcial = loteAbierto * lotePorcentaje / 100
-        loteRestanteParcial = loteAbierto - calcularCierreParcial
-
-        loteCerrar.textContent = calcularCierreParcial.toFixed(2)
-        loteRestante.textContent = loteRestanteParcial.toFixed(2)
-        status.classList.remove("is-invalid");
-        status.classList.add("is-valid");
-        statusPillText.textContent = "Valido ✅";
-    }else{
-        status.classList.remove("is-valid");
-        status.classList.add("is-invalid");
-        statusPillText.textContent = "Faltan Datos"; 
-        return
-    }
-
-
-
-}
-
 //Eventos
 welcomeEntrar.addEventListener('click', function(){
-    const nombreIngresado = welcomeInput.value.trim()
-
-    if(nombreIngresado !== ""){
-        localStorage.setItem('usuario', nombreIngresado)
-        nombre.textContent = localStorage.getItem('usuario')
-        welcome.setAttribute('hidden', '')
-    }
+    usuario.crear()
 }) 
 
 personalizarParciales.addEventListener('click', function(){
@@ -392,38 +445,9 @@ botones.forEach(boton => {
 })
 
 bloquear.addEventListener('click', function () {
-    if (bloqueado) {
-        bloqueado = false
-        bloquear.classList.remove('is-active')
-        select.disabled = false
-        riesgo.readOnly = false
-        sl.readOnly = false
-        cuentaMultiple.disabled = false
-
-        botones.forEach(boton => {
-            boton.style.display = 'flex'
-        })
-
-        status.classList.remove('is-valid')
-        status.classList.remove('is-invalid')
-        statusPillText.textContent = 'Se ha desbloqueado la calculadora 🔓'
-    } else {
-        bloqueado = true
-        bloquear.classList.add('is-active')
-        select.disabled = true
-        riesgo.readOnly = true
-        sl.readOnly = true
-        cuentaMultiple.disabled = true
-
-        botones.forEach(boton => {
-            boton.style.display = 'none'
-        })
-
-        status.classList.remove('is-invalid')
-        status.classList.add('is-valid')
-        statusPillText.textContent = 'Se ha bloqueado la calculadora 🔒'
-    }
+    calcular.bloqueo()
 })
+
 
 cuentaMultiple.addEventListener('click', function cuentaMultipleF() {
     if (mostrarMultiple) {
@@ -463,16 +487,19 @@ cuentaMultiple.addEventListener('click', function cuentaMultipleF() {
     }
 })
 
-riesgo.addEventListener('input', () => calcularLote())
-riesgoSelect.addEventListener('input', () => calcularLote())
-sl.addEventListener('input', () => calcularLote())
-select.addEventListener('change', actualizarPar)
-loteAbiertoInput.addEventListener('input', calcularParciales)
-lotePorcentajeInput.addEventListener('input', calcularParciales)
 
-
+riesgo.addEventListener('input', () => calcular.calcularLote())
+riesgoSelect.addEventListener('input', () => calcular.calcularLote())
+sl.addEventListener('input', () => calcular.calcularLote())
+select.addEventListener('change', () => calcular.actualizarPar())
+loteAbiertoInput.addEventListener('input', () => calcular.calcularParciales())
+lotePorcentajeInput.addEventListener('input', () => calcular.calcularParciales())
 calcularLote()
-calcularParciales()
 
-actualizarHora()
-setInterval(actualizarHora, 1000)
+let usuario = new Usuario ()
+let calcular = new Calculadora()
+let hora = new MercadoHora()
+usuario.iniciar()
+usuario.mostrar()
+hora.actualizarHora()
+setInterval(() => hora.actualizarHora(), 1000)
