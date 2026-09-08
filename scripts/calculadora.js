@@ -178,6 +178,8 @@ class Calculadora {
     }
 }
 
+let calcular = new Calculadora()
+
 function calcularLote(){
 
     valorPip = valorPipTable
@@ -218,8 +220,8 @@ function calcularLote(){
                 let partial1 = 0
                 let partial2 = 0
                 let lotaje = 0
-                const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
-                const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
+                const primerPorcentaje = calcular.primerParcialGuardado > 0 ? calcular.primerParcialGuardado : 33
+                const segundoPorcentaje = calcular.segundoParcialGuardado > 0 ? calcular.segundoParcialGuardado : 33
 
                 labelPartial1_2.textContent = `${primerPorcentaje}% a cerrar en 1:1`
                 labelPartial2_2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
@@ -274,8 +276,8 @@ function calcularLote(){
                 let partial1 = 0
                 let partial2 = 0
                 let lotaje = 0
-                const primerPorcentaje = primerParcialGuardado > 0 ? primerParcialGuardado : 33
-                const segundoPorcentaje = segundoParcialGuardado > 0 ? segundoParcialGuardado : 33
+                const primerPorcentaje = calcular.primerParcialGuardado > 0 ? calcular.primerParcialGuardado : 33
+                const segundoPorcentaje = calcular.segundoParcialGuardado > 0 ? calcular.segundoParcialGuardado : 33
                 labelPartial1.textContent = `${primerPorcentaje}% a cerrar en 1:1`
                 labelPartial2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
 
@@ -379,4 +381,3 @@ loteAbiertoInput.addEventListener('input', () => calcular.calcularParciales())
 lotePorcentajeInput.addEventListener('input', () => calcular.calcularParciales())
 
 calcularLote()
-let calcular = new Calculadora()
