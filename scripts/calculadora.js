@@ -15,6 +15,8 @@ const perdidaSL = document.getElementById('lossResult')
 const primerCierre = document.getElementById('partial1R')
 const segundoCierre = document.getElementById('partial2R')
 const parSeleccionado1 = document.getElementById('parSeleccionado1')
+const rr = document.getElementById('rr')
+const rr2 = document.getElementById('rr2')
 
 const resultado2 = document.getElementById('lotResult2')
 const perdidaSL2 = document.getElementById('lossResult2')
@@ -200,8 +202,10 @@ function calcularLote(){
             perdidaSL2.textContent = !isNaN(valorRiesgo) ? valorRiesgo : "$0.00"
 
             let division = 0
+            let multiplicacionrr = 0
             if (!isNaN(valorRiesgo) && valorRiesgo > 0 ){
                 division = valorRiesgo / (valorSL * valorPip)
+                multiplicacionrr = valorSL * 3
                 }
                 else{
                     status.classList.remove("is-valid");
@@ -240,6 +244,7 @@ function calcularLote(){
                 statusPillText.textContent = "Valido ✅";
                 resultado2.textContent = division.toFixed(2)
                 }
+                rr2.textContent = multiplicacionrr
                 
         }else{
         valorPuntoPip.textContent = valorPip || "—";
@@ -258,8 +263,10 @@ function calcularLote(){
             }
 
             let division = 0
+            let multiplicacionrr = 0
             if (!isNaN(valorRiesgo) && valorRiesgo > 0 ){
                 division = valorRiesgo / (valorSL * valorPip)
+                multiplicacionrr = valorSL * 3
                 }
                 else if (!isNaN(valorRiesgoSelect) && valorRiesgoSelect > 0 ){
                     division = valorRiesgoSelect / (valorSL * valorPip)
@@ -298,6 +305,7 @@ function calcularLote(){
                 riesgoCuenta1 = riesgo.value
                 resultado.textContent = division.toFixed(2)
                 parSeleccionado1.textContent = nombrePar
+                rr.textContent = multiplicacionrr
                 return
         }
     }
