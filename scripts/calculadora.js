@@ -1,8 +1,7 @@
 
 // Entradas
 const select = document.getElementById('pairSelect')
-const riesgoSelect = document.getElementById('riskPercentSelect')
-const riesgo = document.getElementById('riskAmountInput')
+const dinero = document.getElementById('riskAmountInput')
 const sl = document.getElementById('slPipsInput')
 const botones = document.querySelectorAll('.chip')
 const bloquear = document.getElementById('bloquear')
@@ -95,11 +94,12 @@ class Calculadora {
         this.nombrePar = selectPar.par
         valorPipTable = this.valorPipTable
         nombrePar = this.nombrePar
-        this.calcularLote()
+        calcularLote(selectPar.valorPip, selectPar.par)
     }
 
     calcularLote() {
-        calcularLote()
+        const selectPar = informacionPares[select.value] || { valorPip: 0, par: '-' }
+        calcularLote(selectPar.valorPip, selectPar.par)
     }
 
     calcularParciales() {
@@ -128,7 +128,7 @@ class Calculadora {
         if (this.bloqueado) {
             bloquear.classList.add('is-active')
             select.disabled = true
-            riesgo.readOnly = true
+            dinero.readOnly = true
             sl.readOnly = true
             cuentaMultiple.disabled = true
             botones.forEach(boton => {
@@ -140,7 +140,7 @@ class Calculadora {
         } else {
             bloquear.classList.remove('is-active')
             select.disabled = false
-            riesgo.readOnly = false
+            dinero.readOnly = false
             sl.readOnly = false
             cuentaMultiple.disabled = false
             botones.forEach(boton => {
@@ -168,7 +168,7 @@ class Calculadora {
             this.segundoParcialGuardado = segundoParcial
             panelParciales.setAttribute('hidden', '')
             panelParciales.classList.add('is-hidden')
-            calcularLote()
+            calcular.calcularLote()
             status.classList.remove('is-invalid')
             status.classList.add('is-valid')
             statusPillText.textContent = 'Cierres guardados correctamente'
@@ -182,13 +182,69 @@ class Calculadora {
 
 let calcular = new Calculadora()
 
-function calcularLote(){
 
-    valorPip = valorPipTable
+function mensajes(mensaje, comprobar){
+    statusPillText.textContent = mensaje
+    if(comprobar){
+        status.classList.remove("is-invalid");
+        status.classList.add("is-valid");
+    }else{
+        status.classList.remove("is-valid");
+        status.classList.add("is-invalid");
+    }
+    return
+}
 
-    const valorRiesgoSelect = parseFloat(riesgoSelect.value)
-    const valorRiesgo = parseFloat(riesgo.value)
+function limpiarDatos(){
+    resultado2.textContent = '0.00'
+    perdidaSL2.textContent = '$0.00'
+    valorPuntoPip2.textContent = '—'
+    primerCierre2.textContent = '0.00'
+    segundoCierre2.textContent = '0.00'
+    parSeleccionado2.textContent = '—'
+    rr2.textContent = '1:3'
+}
+
+function calcularLote(pip, parSeleccionado){
+
+    let division = 0
+    valorPip = pip
+    let multirr = 0
+    let par = parSeleccionado
+
+    //riesgo a calcular
+    //dinero
+    const valor = parseFloat(dinero.value)
+    //riesgo
     const valorSL = parseFloat(sl.value)
+
+    if(!isNaN(valor) && valor > 0 && (valorPip) && !isNaN(valorSL) && valorSL > 0){
+        division = valor / (valorSL * valorPip)
+        division.toFixed(3)
+        multirr = valorSL * 3
+        mensajes("Valido", true)
+    }else{
+        mensajes("Error: Faltan datos a mostar", false)
+        return
+    }
+
+    if(mostrarMultiple){
+        resultado2.textContent = division.toFixed(3)
+        perdidaSL2.textContent = valor
+        valorPuntoPip2.textContent = pip
+        rr2.textContent = multirr
+        parSeleccionado2.textContent = par
+    }else{
+        resultado.textContent = division.toFixed(3)
+        perdidaSL.textContent = valor
+        valorPuntoPip.textContent = pip
+        rr.textContent = multirr
+        parSeleccionado1.textContent = par
+        resultadoCuenta1 = true
+        riesgoCuenta1 = dinero.value
+    }
+
+    /*
 
     if(mostrarMultiple){
         valorPuntoPip2.textContent = isNaN(valorPip) ? "—" : valorPip
@@ -307,7 +363,7 @@ function calcularLote(){
                 parSeleccionado1.textContent = nombrePar
                 rr.textContent = multiplicacionrr
                 return
-        }
+        } */
     }
 
 personalizarParciales.addEventListener('click', function(){
@@ -331,9 +387,8 @@ if (calcular.primerParcialGuardado > 0 && calcular.segundoParcialGuardado > 0) {
 
 botones.forEach(boton => {
     boton.addEventListener('click', function () {
-        const dinerSelect = this.value
-        riesgo.value = dinerSelect
-        calcularLote()
+        dinero.value = boton.value
+        calcular.calcularLote()
     })
 })
 
@@ -347,45 +402,40 @@ cuentaMultiple.addEventListener('click', function cuentaMultipleF() {
         mostrarMultiple = false
         cuentaMultiple.classList.remove('is-active')
         cuentaMultiple.setAttribute('aria-selected', 'false')
-        riesgo.value = riesgoCuenta1
+        dinero.value = riesgoCuenta1
         tituloResultado2.style.display = 'none'
         mostrarResultado.style.display = 'none'
         tituloParciales2.style.display = 'none'
         mostrarParciales2.style.display = 'none'
-        resultado2.textContent = '0.00'
-        perdidaSL2.textContent = '$0.00'
-        valorPuntoPip2.textContent = '—'
-        primerCierre2.textContent = '0.00'
-        segundoCierre2.textContent = '0.00'
-        statusPillText.textContent = 'Cuenta multiple desactivada'
-        calcularLote()
+        limpiarDatos()
+        mensajes("Cuenta multiple desactivada", true)
+        calcular.calcularLote()
         return
     }
 
     if (resultadoCuenta1) {
         cuentaMultiple.classList.add('is-active')
         cuentaMultiple.setAttribute('aria-selected', 'true')
-        statusPillText.textContent = 'Haz seleccionado cuenta multiple, introduce los valores de la segunda cuenta'
-        riesgoCuenta1 = riesgo.value
-        riesgo.value = ''
+        riesgoCuenta1 = dinero.value
+        dinero.value = ''
         tituloResultado2.style.display = 'block'
         mostrarResultado.style.display = 'grid'
         tituloParciales2.style.display = 'block'
         mostrarParciales2.style.display = 'grid'
         mostrarMultiple = true
+        mensajes('Cuenta 1 guardada. Introduce los datos de la cuenta 2', true)
     } else {
         cuentaMultiple.classList.remove('is-active')
         cuentaMultiple.setAttribute('aria-selected', 'false')
-        statusPillText.textContent = 'Para poder utilizar la opción necestias ingresar la primera cuenta, llena los campos'
+        mensajes('Para poder utilizar la opción necestias ingresar la primera cuenta, llena los campos', false)
     }
 })
 
 
-riesgo.addEventListener('input', () => calcular.calcularLote())
-riesgoSelect.addEventListener('input', () => calcular.calcularLote())
+dinero.addEventListener('input', () => calcular.calcularLote())
 sl.addEventListener('input', () => calcular.calcularLote())
 select.addEventListener('change', () => calcular.actualizarPar())
 loteAbiertoInput.addEventListener('input', () => calcular.calcularParciales())
 lotePorcentajeInput.addEventListener('input', () => calcular.calcularParciales())
 
-calcularLote()
+calcular.calcularLote()
