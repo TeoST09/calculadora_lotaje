@@ -149,6 +149,33 @@ class Calculadora {
             statusPillText.textContent = 'Se ha desbloqueado la calculadora 🔓'
         }
     }
+
+    guardarParciales() {
+        const primerParcial = Number(
+            (primerCierrePersonalizado.value || '').replace('%', '').trim()
+        )
+
+        const segundoParcial = Number(
+            (segundoCierrePersonalizado.value || '').replace('%', '').trim()
+        )
+
+        if (primerParcial > 0 && segundoParcial > 0 && primerParcial + segundoParcial <= 100) {
+            localStorage.setItem('primerParcial', primerParcial)
+            localStorage.setItem('segundoParcial', segundoParcial)
+            this.primerParcialGuardado = primerParcial
+            this.segundoParcialGuardado = segundoParcial
+            panelParciales.setAttribute('hidden', '')
+            panelParciales.classList.add('is-hidden')
+            calcularLote()
+            status.classList.remove('is-invalid')
+            status.classList.add('is-valid')
+            statusPillText.textContent = 'Cierres guardados correctamente'
+        } else {
+            status.classList.remove('is-valid')
+            status.classList.add('is-invalid')
+            statusPillText.textContent = 'Los cierres deben sumar 100% o menos'
+        }
+    }
 }
 
 function calcularLote(){
@@ -285,39 +312,11 @@ const estaOculto = panelParciales.hasAttribute('hidden')
     }
 })
 
-guardarParcialesPersonalizados.addEventListener('click', function(){
-    const primerParcial = Number(
-        primerCierrePersonalizado.value.replace('%', '').trim()
-    )
+guardarParcialesPersonalizados.addEventListener('click', () => calcular.guardarParciales())
 
-    const segundoParcial = Number(
-        segundoCierrePersonalizado.value.replace('%', '').trim()
-    )
-
-    if (primerParcial > 0 && segundoParcial > 0 && primerParcial + segundoParcial <= 100) {
-        localStorage.setItem('primerParcial', primerParcial)
-        localStorage.setItem('segundoParcial', segundoParcial)
-        primerParcialGuardado = primerParcial
-        segundoParcialGuardado = segundoParcial
-        panelParciales.setAttribute('hidden', '')
-        panelParciales.classList.add('is-hidden')
-        calcularLote()
-        status.classList.remove('is-invalid')
-        status.classList.add('is-valid')
-        statusPillText.textContent = "Cierres guardados correctamente"
-    } else {
-        status.classList.remove('is-valid')
-        status.classList.add('is-invalid')
-        statusPillText.textContent = "Los cierres deben sumar 100% o menos"
-    }
-})
-
-let primerParcialGuardado = Number(localStorage.getItem('primerParcial'))
-let segundoParcialGuardado = Number(localStorage.getItem('segundoParcial'))
-
-if (primerParcialGuardado > 0 && segundoParcialGuardado > 0) {
-    primerCierrePersonalizado.value = primerParcialGuardado
-    segundoCierrePersonalizado.value = segundoParcialGuardado
+if (calcular.primerParcialGuardado > 0 && calcular.segundoParcialGuardado > 0) {
+    primerCierrePersonalizado.value = calcular.primerParcialGuardado
+    segundoCierrePersonalizado.value = calcular.segundoParcialGuardado
 }
 
 botones.forEach(boton => {
@@ -378,7 +377,6 @@ sl.addEventListener('input', () => calcular.calcularLote())
 select.addEventListener('change', () => calcular.actualizarPar())
 loteAbiertoInput.addEventListener('input', () => calcular.calcularParciales())
 lotePorcentajeInput.addEventListener('input', () => calcular.calcularParciales())
+
 calcularLote()
-
-
 let calcular = new Calculadora()
