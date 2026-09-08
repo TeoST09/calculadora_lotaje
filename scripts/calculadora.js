@@ -1,8 +1,3 @@
-// Usuario
-const welcome = document.getElementById('welcomeModal')
-const welcomeInput = document.getElementById('welcomeName')
-const welcomeEntrar = document.getElementById('welcomeEntrar')
-const nombre = document.getElementById('userNameDisplay')
 
 // Entradas
 const select = document.getElementById('pairSelect')
@@ -41,7 +36,7 @@ const labelPartial2 = document.getElementById('partial2Label')
 const labelPartial1_2 = document.getElementById('partial1Label2')
 const labelPartial2_2 = document.getElementById('partial2Label2')
 
-// Estado interfaz
+//Estado de la interfaz
 const status = document.querySelector('.header-status')
 const statusPillText = document.getElementById('statusPillText')
 const mostrarResultado = document.getElementById('mostrarResultado2')
@@ -49,32 +44,20 @@ const tituloResultado2 = document.getElementById('tituloResultado2')
 const mostrarParciales2 = document.getElementById('mostrarParciales2')
 const tituloParciales2 = document.getElementById('mostarParciales2')
 
-//versión
-const footer = document.getElementById('footer')
-
-footer.append(
-document.createElement("br"),
-'Versión 1.0.9'
-)
-
-//Herramientas adicionales
 const personalizarParciales = document.getElementById('toggleCustomPartials')
 const panelParciales = document.getElementById('customPartialsPanel')
 const primerCierrePersonalizado = document.getElementById('firstPartialInput')
 const segundoCierrePersonalizado = document.getElementById('secondPartialInput')
 const guardarParcialesPersonalizados = document.getElementById('saveCustomPartials')
 
-//Horario
-const horario = document.getElementById('hora')
-const sesion = document.getElementById('sesion')
-
-//Calculadora
 
 let bloqueado = false
 let resultadoCuenta1 = false
 let mostrarMultiple = false
 let riesgoCuenta1 = ''
 let valorPip = 0
+let valorPipTable = 0
+let nombrePar = ''
 
 
 const informacionPares = {
@@ -86,95 +69,6 @@ const informacionPares = {
     "6": { valorPip: 100, par: "XAUUSD" },
     "7": { valorPip: 1, par: "USTEC" },
     "8": { valorPip: 10, par: "USTEC-BULLFY" }
-}
-
-
-let valorPipTable = 0
-let nombrePar = ''
-
-//Clases
-
-class Usuario{
-    constructor(nombre){
-        this.nombre = localStorage.getItem('usuario')
-    }
-    
-    get obtenerNombre(){
-        return this.nombre 
-    }
-
-    iniciar(){
-        if(!this.obtenerNombre){
-             welcome.removeAttribute('hidden') 
-        }else{
-            welcome.setAttribute('hidden', '')
-        }
-    }
-
-    crear(){
-        const nombreIngresado = welcomeInput.value.trim()
-        if(nombreIngresado !== ""){
-            localStorage.setItem('usuario', nombreIngresado)
-            nombre.textContent = localStorage.getItem('usuario')
-            welcome.setAttribute('hidden', '')
-        }
-    }
-
-    mostrar(){
-        if(this.obtenerNombre){
-            nombre.textContent = this.obtenerNombre
-        }
-    }
-}
-
-class MercadoHora {
-    constructor() {
-        this.horaEl = document.getElementById('hora')
-        this.sesionEl = document.getElementById('sesion')
-    }
-
-    actualizarHora() {
-        const config = {
-            timeZone: 'America/Bogota',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        }
-
-        const configDia = {
-            timeZone: 'America/Bogota',
-            weekday: 'long'
-        }
-
-        const formateador = new Intl.DateTimeFormat('es-CO', config)
-        const formateadorDia = new Intl.DateTimeFormat('es-CO', configDia)
-
-        const obtenerHora = formateador.format(new Date())
-        const obtenerDia = formateadorDia.format(new Date())
-        const parte = formateador.formatToParts(new Date())
-        const partePeriodo = parte.find(parte => parte.type === 'dayPeriod')
-        const obtenerAmPm = partePeriodo ? partePeriodo.value : ''
-        const horaActualC = parseInt(obtenerHora.split(':')[0])
-
-        if ((obtenerDia === 'viernes' && horaActualC >= 5 && obtenerAmPm === 'p. m.') ||
-            obtenerDia === 'sábado' ||
-            (obtenerDia === 'domingo' && horaActualC <= 5 && obtenerAmPm === 'p. m.')) {
-            this.sesionEl.textContent = 'Cerrado'
-        } else {
-            if (obtenerAmPm === 'a. m.') {
-                if (horaActualC >= 2 && horaActualC < 5) {
-                    this.sesionEl.textContent = 'Londres'
-                } else if (horaActualC >= 7 && horaActualC < 12) {
-                    this.sesionEl.textContent = 'Nueva York'
-                }
-            } else {
-                this.sesionEl.textContent = 'Sesion Asiática'
-            }
-        }
-
-        this.horaEl.textContent = obtenerHora
-    }
 }
 
 
@@ -256,11 +150,6 @@ class Calculadora {
         }
     }
 }
-
-
-//Funciones
-
-// Calculadora
 
 function calcularLote(){
 
@@ -382,15 +271,10 @@ function calcularLote(){
                 parSeleccionado1.textContent = nombrePar
                 return
         }
-        }
-
-//Eventos
-welcomeEntrar.addEventListener('click', function(){
-    usuario.crear()
-}) 
+    }
 
 personalizarParciales.addEventListener('click', function(){
-    const estaOculto = panelParciales.hasAttribute('hidden')
+const estaOculto = panelParciales.hasAttribute('hidden')
 
     if(estaOculto){
         panelParciales.removeAttribute('hidden')
@@ -496,10 +380,5 @@ loteAbiertoInput.addEventListener('input', () => calcular.calcularParciales())
 lotePorcentajeInput.addEventListener('input', () => calcular.calcularParciales())
 calcularLote()
 
-let usuario = new Usuario ()
+
 let calcular = new Calculadora()
-let hora = new MercadoHora()
-usuario.iniciar()
-usuario.mostrar()
-hora.actualizarHora()
-setInterval(() => hora.actualizarHora(), 1000)
