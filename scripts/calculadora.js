@@ -82,8 +82,15 @@ class Calculadora {
         this.valorPip = 0
         this.valorPipTable = 0
         this.nombrePar = ''
-        this.primerParcialGuardado = Number(localStorage.getItem('primerParcial'))
-        this.segundoParcialGuardado = Number(localStorage.getItem('segundoParcial'))
+        this.primerParcialGuardado = Number(localStorage.getItem('primerParcial')) || 33
+        this.segundoParcialGuardado = Number(localStorage.getItem('segundoParcial')) || 33
+    }
+
+    get parciales(){
+        return {
+            primerParcial: this.primerParcialGuardado,
+            segundoParcial: this.segundoParcialGuardado
+        }
     }
 
     actualizarPar() {
@@ -206,21 +213,32 @@ function limpiarDatos(){
 }
 
 function calcularLote(pip, parSeleccionado){
+    let par = parSeleccionado
+    let valorPip = pip
 
     let division = 0
-    valorPip = pip
     let multirr = 0
-    let par = parSeleccionado
 
-    //riesgo a calcular
-    //dinero
+    let parciales = 0
+    let parciales2 = 0
+    let restaParcial = 0
+
     const valor = parseFloat(dinero.value)
-    //riesgo
     const valorSL = parseFloat(sl.value)
+
+    const { primerParcial, segundoParcial } = calcular.parciales
+
+    let por = ("%")
+    labelPartial1.textContent = primerParcial + por
+    labelPartial2.textContent = segundoParcial + por
+    labelPartial1_2.textContent = primerParcial + por
+    labelPartial2_2.textContent = segundoParcial + por
 
     if(!isNaN(valor) && valor > 0 && (valorPip) && !isNaN(valorSL) && valorSL > 0){
         division = valor / (valorSL * valorPip)
-        division.toFixed(3)
+        parciales = (division * primerParcial) / 100
+        restaParcial = (division - parciales)
+        parciales2 = (restaParcial * segundoParcial) / 100
         multirr = valorSL * 3
         mensajes("Valido", true)
     }else{
@@ -234,6 +252,8 @@ function calcularLote(pip, parSeleccionado){
         valorPuntoPip2.textContent = pip
         rr2.textContent = multirr
         parSeleccionado2.textContent = par
+        primerCierre2.textContent = parciales.toFixed(2)
+        segundoCierre2.textContent = parciales2.toFixed(2)
     }else{
         resultado.textContent = division.toFixed(3)
         perdidaSL.textContent = valor
@@ -242,128 +262,10 @@ function calcularLote(pip, parSeleccionado){
         parSeleccionado1.textContent = par
         resultadoCuenta1 = true
         riesgoCuenta1 = dinero.value
+        primerCierre.textContent = parciales.toFixed(2)
+        segundoCierre.textContent = parciales2.toFixed(2)
     }
 
-    /*
-
-    if(mostrarMultiple){
-        valorPuntoPip2.textContent = isNaN(valorPip) ? "—" : valorPip
-         if(isNaN(valorPip) || isNaN(valorSL)){
-                status.classList.remove("is-valid");
-                status.classList.add("is-invalid");
-                statusPillText.textContent = "Faltan datos esenciales";
-                return
-            }
-
-            perdidaSL2.textContent = !isNaN(valorRiesgo) ? valorRiesgo : "$0.00"
-
-            let division = 0
-            let multiplicacionrr = 0
-            if (!isNaN(valorRiesgo) && valorRiesgo > 0 ){
-                division = valorRiesgo / (valorSL * valorPip)
-                multiplicacionrr = valorSL * 3
-                }
-                else{
-                    status.classList.remove("is-valid");
-                    status.classList.add("is-invalid");
-                    statusPillText.textContent = "Datos incompletos";
-                    resultado2.textContent = "Datos incompletos"
-                    return
-                    }
-
-                resultado2.textContent = division.toFixed(2)
-                status.classList.remove("is-invalid");
-                status.classList.add("is-valid");
-                statusPillText.textContent = "Valido ✅";
-                parSeleccionado2.textContent = nombrePar
-
-                let partial1 = 0
-                let partial2 = 0
-                let lotaje = 0
-                const primerPorcentaje = calcular.primerParcialGuardado > 0 ? calcular.primerParcialGuardado : 33
-                const segundoPorcentaje = calcular.segundoParcialGuardado > 0 ? calcular.segundoParcialGuardado : 33
-
-                labelPartial1_2.textContent = `${primerPorcentaje}% a cerrar en 1:1`
-                labelPartial2_2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
-                
-                if(division!== 0){
-                    partial1 = (division * primerPorcentaje) / 100
-                    primerCierre2.textContent = partial1.toFixed(2)
-
-                    lotaje = division - partial1   
-
-                    partial2 = (lotaje * segundoPorcentaje) / 100
-                    segundoCierre2.textContent = partial2.toFixed(2)
-                }else{
-                status.classList.remove("is-invalid");
-                status.classList.add("is-valid");
-                statusPillText.textContent = "Valido ✅";
-                resultado2.textContent = division.toFixed(2)
-                }
-                rr2.textContent = multiplicacionrr
-                
-        }else{
-        valorPuntoPip.textContent = valorPip || "—";
-        if(isNaN(valorPip) || isNaN(valorSL)){
-                status.classList.remove("is-valid");
-                status.classList.add("is-invalid");
-                statusPillText.textContent = "Faltan datos esenciales";
-                resultadoCuenta1 = false
-                return
-            }
-
-            if (!isNaN(valorRiesgo)) {
-                perdidaSL.textContent = valorRiesgo
-            }else{
-                perdidaSL.textContent = valorRiesgoSelect
-            }
-
-            let division = 0
-            let multiplicacionrr = 0
-            if (!isNaN(valorRiesgo) && valorRiesgo > 0 ){
-                division = valorRiesgo / (valorSL * valorPip)
-                multiplicacionrr = valorSL * 3
-                }
-                else if (!isNaN(valorRiesgoSelect) && valorRiesgoSelect > 0 ){
-                    division = valorRiesgoSelect / (valorSL * valorPip)
-                    }
-                else{
-                    status.classList.remove("is-valid");
-                    status.classList.add("is-invalid");
-                    statusPillText.textContent = "Datos incompletos";
-                    resultado.textContent = "Datos incompletos"
-                    resultadoCuenta1 = false
-                    return
-                }
-
-                let partial1 = 0
-                let partial2 = 0
-                let lotaje = 0
-                const primerPorcentaje = calcular.primerParcialGuardado > 0 ? calcular.primerParcialGuardado : 33
-                const segundoPorcentaje = calcular.segundoParcialGuardado > 0 ? calcular.segundoParcialGuardado : 33
-                labelPartial1.textContent = `${primerPorcentaje}% a cerrar en 1:1`
-                labelPartial2.textContent = `${segundoPorcentaje}% a cerrar en 1:2`
-
-                if(division !== 0){
-                    partial1 = (division * primerPorcentaje) / 100
-
-                    lotaje = division - partial1
-
-                    partial2 = (lotaje * segundoPorcentaje) / 100
-                }
-                primerCierre.textContent = partial1.toFixed(2)
-                segundoCierre.textContent = partial2.toFixed(2)
-
-                status.classList.remove("is-invalid");
-                status.classList.add("is-valid");
-                statusPillText.textContent = "Valido ✅";
-                resultadoCuenta1 = true
-                riesgoCuenta1 = riesgo.value
-                resultado.textContent = division.toFixed(2)
-                parSeleccionado1.textContent = nombrePar
-                rr.textContent = multiplicacionrr
-                return
-        } */
     }
 
 personalizarParciales.addEventListener('click', function(){
