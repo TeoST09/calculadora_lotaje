@@ -1,11 +1,11 @@
-# 1% — Calculadora de Lotaje y Gestión de Riesgo
+# 1% - Calculadora de Lotaje y Gestion de Riesgo
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge\&logo=html5\&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge\&logo=css3\&logoColor=white)](https://developer.mozilla.org/es/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge\&logo=github\&logoColor=white)](https://pages.github.com/)
 
-> Calculadora web para determinar el tamaño de lote de una operación en función del riesgo y la distancia al Stop Loss.
+> Calculadora web para determinar el tamaño de lote de una operación según el riesgo y la distancia al Stop Loss.
 
 [**Demo**](https://teost09.github.io/calculadora_lotaje/)
 
@@ -13,7 +13,9 @@
 
 ## Descripción
 
-**1%** es una calculadora web diseñada para traders que quieren gestionar de forma sencilla el riesgo de sus operaciones.
+**1%** es una calculadora web creada como proyecto de JavaScript para practicar cálculos, eventos, clases, manipulación del DOM y almacenamiento local.
+
+También puede servir como herramienta de apoyo para traders que quieren conocer de forma rápida el tamaño aproximado de una posición antes de abrir una operación.
 
 La herramienta permite calcular el tamaño de posición teniendo en cuenta:
 
@@ -34,7 +36,7 @@ El objetivo es evitar cálculos manuales y conocer rápidamente cuánto se está
 * Riesgo simplificado mediante una cantidad fija de dinero.
 * Botones rápidos para seleccionar riesgos de `$25`, `$50`, `$100` o `$200`.
 * Opción para trabajar con una segunda cuenta y consultar sus resultados por separado.
-* Cálculo de cierres parciales del 33% en los niveles 1:1 y 1:2.
+* Cálculo de cierres parciales configurables en los niveles 1:1 y 1:2.
 * Calculadora de cierre personalizado según el lotaje abierto y el porcentaje elegido.
 * Bloqueo de la calculadora para evitar cambios accidentales en los datos.
 * Indicador visual del estado de la calculadora y de la validación de los datos.
@@ -128,18 +130,22 @@ No requiere backend ni base de datos.
 
 ## Versión
 
-Versión actual: **1.0.7**.
+Versión actual: **1.0.9**.
 
 ---
 
 ## Estructura del proyecto
 
 ```text
-calculadora_de_lotaje/
+calculadora_lotaje/
 │
 ├── index.html
 ├── style.css
-├── script.js
+├── scripts/
+│   ├── calculadora.js
+│   ├── horario.js
+│   ├── script.js
+│   └── usuario.js
 └── README.md
 ```
 
@@ -228,8 +234,8 @@ Los resultados pueden variar dependiendo del broker, instrumento, tipo de cuenta
 
 <div align="center">
 
-### 1% — Calculadora de Lotaje y Gestión de Riesgo
+### 1% - Calculadora de Lotaje y Gestion de Riesgo
 
-[![GitHub Pages](https://img.shields.io/badge/Ver%20proyecto-GitHub%20Pages-222222?style=for-the-badge\&logo=github)](https://teost09.github.io/calculadora_de_lotaje/)
+[![GitHub Pages](https://img.shields.io/badge/Ver%20proyecto-GitHub%20Pages-222222?style=for-the-badge\&logo=github)](https://teost09.github.io/calculadora_lotaje/)
 
 </div>
