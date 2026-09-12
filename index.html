@@ -47,6 +47,22 @@
   </div>
 </section>
 
+<div class="update-tab">
+  <input type="checkbox" id="updateOpen" class="update-tab__input" />
+  <input type="checkbox" id="updateDismiss" class="update-tab__input" />
+
+  <label for="updateOpen" class="update-tab__trigger">
+    <span class="update-tab__dot" aria-hidden="true"></span>
+    <span>v2.0.0</span>
+  </label>
+
+  <div class="update-tab__panel" role="status">
+    <span class="update-tab__panel-eyebrow">Nueva actualización</span>
+    <p>La versión <strong>v2.0.0</strong> ya está disponible. Mejoras de calculo y nuevas funcionalidades para tu espacio.</p>
+    <label for="updateDismiss" class="update-tab__panel-close">No mostrar de nuevo</label>
+  </div>
+</div>
+
 <div class="app">
 
 
@@ -69,7 +85,7 @@
         <defs>
           <linearGradient id="g1" x1="4" y1="30" x2="36" y2="8" gradientUnits="userSpaceOnUse">
             <stop stop-color="#38FF80"/>
-            <stop offset="1" stop-color="#B0FFCC"/>
+            <stop offset="1" stop-color="#CDFA4C"/>
           </linearGradient>
         </defs>
       </svg>
