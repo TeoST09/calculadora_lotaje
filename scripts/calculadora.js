@@ -61,6 +61,18 @@ let valorPipTable = 0
 let nombrePar = ''
 
 
+function mensajes(mensaje, comprobar){
+    statusPillText.textContent = mensaje
+    if(comprobar){
+        status.classList.remove("is-invalid");
+        status.classList.add("is-valid");
+    }else{
+        status.classList.remove("is-valid");
+        status.classList.add("is-invalid");
+    }
+    return
+}
+
 const informacionPares = {
     "1": { valorPip: 10, par: "EURUSD" },
     "2": { valorPip: 10, par: "GBPUSD" },
@@ -119,13 +131,9 @@ class Calculadora {
 
             loteCerrar.textContent = calcularCierreParcial.toFixed(2)
             loteRestante.textContent = loteRestanteParcial.toFixed(2)
-            status.classList.remove('is-invalid')
-            status.classList.add('is-valid')
-            statusPillText.textContent = 'Valido ✅'
+            mensajes('Valido', true)
         } else {
-            status.classList.remove('is-valid')
-            status.classList.add('is-invalid')
-            statusPillText.textContent = 'Faltan Datos'
+            mensajes('Faltan datos', false)
         }
     }
 
@@ -141,9 +149,7 @@ class Calculadora {
             botones.forEach(boton => {
                 boton.style.display = 'none'
             })
-            status.classList.remove('is-invalid')
-            status.classList.add('is-valid')
-            statusPillText.textContent = 'Se ha bloqueado la calculadora 🔒'
+            mensajes('Se ha bloqueado la calculadora 🔒', true)
         } else {
             bloquear.classList.remove('is-active')
             select.disabled = false
@@ -153,9 +159,7 @@ class Calculadora {
             botones.forEach(boton => {
                 boton.style.display = 'flex'
             })
-            status.classList.remove('is-valid')
-            status.classList.remove('is-invalid')
-            statusPillText.textContent = 'Se ha desbloqueado la calculadora 🔓'
+            mensajes('Se ha desbloqueado la calculadora 🔓', true)
         }
     }
 
@@ -171,36 +175,19 @@ class Calculadora {
         if (primerParcial > 0 && segundoParcial > 0 && primerParcial + segundoParcial <= 100) {
             localStorage.setItem('primerParcial', primerParcial)
             localStorage.setItem('segundoParcial', segundoParcial)
-            this.primerParcialGuardado = primerParcial
-            this.segundoParcialGuardado = segundoParcial
+            this.parciales.primerParcial = primerParcial
+            this.parciales.segundoParcial = segundoParcial
             panelParciales.setAttribute('hidden', '')
             panelParciales.classList.add('is-hidden')
             calcular.calcularLote()
-            status.classList.remove('is-invalid')
-            status.classList.add('is-valid')
-            statusPillText.textContent = 'Cierres guardados correctamente'
+            mensajes('Cierres guardados correctamente', true)
         } else {
-            status.classList.remove('is-valid')
-            status.classList.add('is-invalid')
-            statusPillText.textContent = 'Los cierres deben sumar 100% o menos'
+            mensajes('Los cierres deben sumar 100% o menos', false)
         }
     }
 }
 
 let calcular = new Calculadora()
-
-
-function mensajes(mensaje, comprobar){
-    statusPillText.textContent = mensaje
-    if(comprobar){
-        status.classList.remove("is-invalid");
-        status.classList.add("is-valid");
-    }else{
-        status.classList.remove("is-valid");
-        status.classList.add("is-invalid");
-    }
-    return
-}
 
 function limpiarDatos(){
     resultado2.textContent = '0.00'
