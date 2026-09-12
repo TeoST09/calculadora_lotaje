@@ -247,7 +247,7 @@ function calcularLote(pip, parSeleccionado){
     }
 
     if(mostrarMultiple){
-        resultado2.textContent = division.toFixed(3)
+        resultado2.textContent = division.toFixed(2)
         perdidaSL2.textContent = valor
         valorPuntoPip2.textContent = pip
         rr2.textContent = multirr
@@ -255,7 +255,7 @@ function calcularLote(pip, parSeleccionado){
         primerCierre2.textContent = parciales.toFixed(2)
         segundoCierre2.textContent = parciales2.toFixed(2)
     }else{
-        resultado.textContent = division.toFixed(3)
+        resultado.textContent = division.toFixed(2)
         perdidaSL.textContent = valor
         valorPuntoPip.textContent = pip
         rr.textContent = multirr
