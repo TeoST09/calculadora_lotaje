@@ -47,10 +47,18 @@ const tituloParciales2 = document.getElementById('mostarParciales2')
 
 const personalizarParciales = document.getElementById('toggleCustomPartials')
 const panelParciales = document.getElementById('customPartialsPanel')
+const personalizarTp = document.getElementById('toggleTp')
+const panelTp = document.getElementById('tpPanel')
 const primerCierrePersonalizado = document.getElementById('firstPartialInput')
 const segundoCierrePersonalizado = document.getElementById('secondPartialInput')
 const guardarParcialesPersonalizados = document.getElementById('saveCustomPartials')
 
+//Take Profit
+
+const inputTp = document.getElementById('tpRatioInput')
+const guardarTp = document.getElementById('saveTp')
+const ratioRiesgo = document.getElementById('ratioRiesgo')
+const ratioRiesgo2 = document.getElementById('ratioRiesgo2')
 
 let bloqueado = false
 let resultadoCuenta1 = false
@@ -187,7 +195,62 @@ class Calculadora {
     }
 }
 
+class herramientasAdicionales{
+    constructor(){
+        this.rr = ratioRiesgo
+        this.rr2 = ratioRiesgo2
+    }
+
+    get obtenerNivel(){
+        return inputTp.value.trim()
+    }
+
+    set obtenerNivel(valor){
+        inputTp.value = valor
+    }
+
+    get ratios(){
+        return{
+            primerRatio: this.rr,
+            segundoRatio: this.rr2
+        }
+    }
+
+    set ratios(valor){
+        this.rr.textContent = valor
+        this.rr2.textContent = valor
+    }
+
+    guardarTakeProfit(){
+        let numero = 0
+
+        for (let i = 0; i < this.obtenerNivel.length; i++) {
+            numero = this.obtenerNivel[i];
+        }
+
+        localStorage.setItem('tp', numero)
+        this.imprimirRatio()
+        mensajes('Se ha guardado correctamente', true)
+        panelTp.setAttribute('hidden', '')
+        panelTp.classList.add('is-hidden')
+    }
+
+    imprimirRatio(){
+        let obtenerTp = localStorage.getItem('tp')
+        if(!obtenerTp){
+           localStorage.setItem('tp', 2)
+           obtenerTp = 2
+        }
+        let asingar = "1:" + obtenerTp
+        this.ratios = asingar
+        this.obtenerNivel = asingar
+    }
+}
+
 let calcular = new Calculadora()
+let herramientas = new herramientasAdicionales()
+
+herramientas.imprimirRatio()
 
 function limpiarDatos(){
     resultado2.textContent = '0.00'
@@ -204,6 +267,7 @@ function calcularLote(pip, parSeleccionado){
     let valorPip = pip
 
     let division = 0
+    let traerTp = 0
     let multirr = 0
 
     let parciales = 0
@@ -226,7 +290,9 @@ function calcularLote(pip, parSeleccionado){
         parciales = (division * primerParcial) / 100
         restaParcial = (division - parciales)
         parciales2 = (restaParcial * segundoParcial) / 100
-        multirr = valorSL * 3
+        traerTp = localStorage.getItem('tp')
+        multirr = valorSL * traerTp
+
         mensajes("Valido", true)
     }else{
         mensajes("Error: Faltan datos a mostar", false)
@@ -264,6 +330,18 @@ const estaOculto = panelParciales.hasAttribute('hidden')
     }else{
         panelParciales.setAttribute('hidden', '')
         panelParciales.classList.add('is-hidden')
+    }
+})
+
+personalizarTp.addEventListener('click', function(){
+const estaOculto = panelTp.hasAttribute('hidden')
+
+    if(estaOculto){
+        panelTp.removeAttribute('hidden')
+        panelTp.classList.remove('is-hidden')
+    }else{
+        panelTp.setAttribute('hidden', '')
+        panelTp.classList.add('is-hidden')
     }
 })
 
@@ -320,6 +398,9 @@ cuentaMultiple.addEventListener('click', function cuentaMultipleF() {
     }
 })
 
+guardarTp.addEventListener('click', () => {
+    herramientas.guardarTakeProfit()
+})
 
 dinero.addEventListener('input', () => calcular.calcularLote())
 sl.addEventListener('input', () => calcular.calcularLote())

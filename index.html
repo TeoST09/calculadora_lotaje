@@ -202,8 +202,8 @@
           <span class="result-value" id="parSeleccionado1">—</span>
         </div>
         <div class="result-card">
-          <span class="result-label">1:3 RR</span>
-          <span class="result-value" id="rr">1:3</span>
+          <span class="result-label" id="ratioRiesgo">RR</span>
+          <span class="result-value" id="rr">---</span>
         </div> 
       </div>
 
@@ -227,8 +227,8 @@
           <span class="result-value" id="parSeleccionado2">—</span>
         </div>
         <div class="result-card">
-          <span class="result-label">1:3 RR</span>
-          <span class="result-value" id="rr2">1:3</span>
+          <span class="result-label" id="ratioRiesgo2">RR</span>
+          <span class="result-value" id="rr2">--</span>
         </div>  
       </div>
 
@@ -320,7 +320,7 @@
     <div class="custom-partials-panel panel is-hidden" id="customPartialsPanel" hidden>
       <div class="custom-partials-heading">
         <div>
-          <span class="panel-index">05</span>
+          <span class="panel-index">06</span>
           <h2>Configura tus cierres</h2>
         </div>
         <p>Define el porcentaje de tu primer y segundo cierre.</p>
@@ -345,6 +345,50 @@
       <div class="custom-partials-footer">
         <p class="hint">La suma de ambos porcentajes no debería superar el 100%.</p>
         <button type="button" class="save-preference-button" id="saveCustomPartials">Guardar cierres</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="custom-partials-section tp-section" aria-labelledby="tpTitle">
+    <button type="button" class="custom-partials-toggle" id="toggleTp" aria-expanded="false" aria-controls="tpPanel">
+      <span>
+        <span class="custom-partials-toggle__eyebrow">Herramienta adicional</span>
+        <strong id="tpTitle">Take Profit de la operación</strong>
+      </span>
+      <span class="custom-partials-toggle__icon" aria-hidden="true">+</span>
+    </button>
+
+    <div class="custom-partials-panel panel is-hidden" id="tpPanel" hidden>
+      <div class="custom-partials-heading">
+        <div>
+          <span class="panel-index">05</span>
+          <h2>Selecciona tu objetivo</h2>
+        </div>
+        <p>Elige el nivel de Take Profit para esta operación.</p>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="tpRatioInput">Nivel de TP</label>
+          <div class="input-wrap">
+            <span class="input-prefix">1:</span>
+            <input type="text" inputmode="decimal" id="tpRatioInput" name="tp_ratio" placeholder="3">
+          </div>
+        </div>
+      </div>
+
+      <div class="field"> <br>
+        <label>Selección rápida</label>
+        <div class="chip-row" aria-label="Niveles rápidos de Take Profit">
+          <button type="button" class="chip" value="1">1:1</button>
+          <button type="button" class="chip" value="2">1:2</button>
+          <button type="button" class="chip" value="3">1:3</button>
+          <button type="button" class="chip" value="4">1:4</button>
+          <button type="button" class="chip" value="5">1:5</button>
+        </div>
+      </div>
+        <div class="custom-partials-footer">
+        <button type="button" class="save-preference-button" id="saveTp">Guardar</button>
       </div>
     </div>
   </section>
