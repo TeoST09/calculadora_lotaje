@@ -64,19 +64,6 @@
 </div>
 
 <div class="app">
-
-
-  <div class="header-market-info" aria-label="Información de mercado">
-    <div class="clock-display">
-      <span class="header-meta-label">Hora local</span>
-      <strong id="hora">Cargando...</strong>
-    </div>
-    <div class="session-display">
-      <span class="header-meta-label">Sesión</span>
-      <strong id="sesion">Cargando...</strong>
-    </div>
-  </div>
-
   <nav class="app-header" aria-label="Navegación principal">
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,8 +71,8 @@
         <path d="M27 8 H36 V17" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <defs>
           <linearGradient id="g1" x1="4" y1="30" x2="36" y2="8" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#38FF80"/>
-            <stop offset="1" stop-color="#CDFA4C"/>
+            <stop stop-color="#F2E6C6"/>
+            <stop offset="1" stop-color="#B99C54"/>
           </linearGradient>
         </defs>
       </svg>
@@ -98,6 +85,17 @@
       <strong id="userNameDisplay">Cargando...</strong>
     </div>
   </nav>
+
+  <div class="header-market-info" aria-label="Información de mercado">
+    <div class="clock-display">
+      <span class="header-meta-label">Hora local</span>
+      <strong id="hora">Cargando...</strong>
+    </div>
+    <div class="session-display">
+      <span class="header-meta-label">Sesión</span>
+      <strong id="sesion">Cargando...</strong>
+    </div>
+  </div>
 
   <div class="header-tools">
     <div class="header-actions">
@@ -112,11 +110,13 @@
     </div>
   </div>
 
-  <div class="custom-partials-notice" role="note">
-    <span class="custom-partials-notice__mark" aria-hidden="true">+</span>
-    <span>Al final de la página encontrarás los parámetros personalizados.</span>
-  </div>
-
+  <section class="page-intro" aria-labelledby="pageTitle">
+    <div class="page-intro__copy">
+      <span class="page-intro__eyebrow">Gestión de riesgo · 1%</span>
+      <h2 id="pageTitle">Opera con control.</h2>
+      <p>Define tu riesgo y calcula el lotaje adecuado antes de abrir una operación.</p>
+    </div>
+  </section>
 
   <main class="layout">
 
